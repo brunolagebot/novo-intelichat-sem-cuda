@@ -119,4 +119,17 @@ env/
 venv/
 
 # VS Code files for settings and tasks
-.vscode/ 
+.vscode/
+
+# Arquivos grandes e modelos
+*.safetensors
+*.pt
+*.pth
+results-llama3-8b-chat-adapter/
+results-llama3-8b-chat-schema-adapter/
+*.bin
+tokenizer.json
+adapter_config.json
+special_tokens_map.json
+scheduler.pt
+rng_state.pth 
