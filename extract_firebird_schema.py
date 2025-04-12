@@ -128,7 +128,7 @@ def get_constraint_details(cur, relation_id):
     return dict(constraints)
 
 def extract_schema(db_path, user, password, charset):
-    """Conecta ao banco Firebird e extrai o esquema das tabelas de usuário."""
+    """Conecta ao banco Firebird e extrai o esquema das tabelas e views de usuário."""
     schema = {}
     conn = None
     try:
@@ -140,20 +140,32 @@ def extract_schema(db_path, user, password, charset):
             charset=charset
         )
         cur = conn.cursor()
-        logger.info("Conexão bem-sucedida. Extraindo tabelas...")
+        logger.info("Conexão bem-sucedida. Extraindo tabelas e views...")
 
-        # Seleciona apenas tabelas de usuário (SYSTEM_FLAG = 0 ou NULL)
-        cur.execute("SELECT RDB$RELATION_NAME FROM RDB$RELATIONS WHERE RDB$SYSTEM_FLAG = 0 OR RDB$SYSTEM_FLAG IS NULL AND RDB$VIEW_BLR IS NULL ORDER BY RDB$RELATION_NAME;")
+        # Seleciona tabelas e views de usuário (SYSTEM_FLAG = 0 ou NULL)
+        # Inclui RDB$VIEW_BLR para identificar views
+        sql_relations = """
+            SELECT RDB$RELATION_NAME, RDB$VIEW_BLR
+            FROM RDB$RELATIONS
+            WHERE RDB$SYSTEM_FLAG = 0 OR RDB$SYSTEM_FLAG IS NULL
+            ORDER BY RDB$RELATION_NAME;
+        """
+        cur.execute(sql_relations)
 
         for table_row in cur.fetchallmap():
             table_name = table_row['RDB$RELATION_NAME'].strip()
-            logger.info(f"Processando tabela: {table_name}...")
+            is_view = table_row['RDB$VIEW_BLR'] is not None
+            object_type = "VIEW" if is_view else "TABLE"
+
+            logger.info(f"Processando {object_type}: {table_name}...")
             schema[table_name] = {
+                "object_type": object_type,
                 "columns": get_column_details(cur, table_name),
+                # Constraints podem ser menos relevantes ou vazias para views
                 "constraints": get_constraint_details(cur, table_name)
             }
 
-        logger.info(f"Extração concluída. Total de tabelas encontradas: {len(schema)}")
+        logger.info(f"Extração concluída. Total de tabelas/views encontradas: {len(schema)}")
         return schema
 
     except fdb.Error as e:
@@ -165,7 +177,7 @@ def extract_schema(db_path, user, password, charset):
     finally:
         if conn:
             conn.close()
-            logger.info("Conexão fechada.")
+            logger.info("Conexão de extração fechada.")
 
 def main():
     try:
