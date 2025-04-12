@@ -8,10 +8,17 @@ pytest
 pytest-mock # Para simular dependências (como requests) 
 
 # Fine-tuning & Transformers
-transformers[torch]>=4.40 # Inclui pytorch
-datasets>=2.18 # Para carregar e processar dados
-trl>=0.8.6 # Para SFTTrainer (fine-tuning)
-accelerate>=0.29 # Para otimizar treinamento em diferentes hardwares
-peft>=0.10 # Para LoRA/QLoRA (Parameter-Efficient Fine-Tuning)
-bitsandbytes>=0.43 # Para quantização (QLoRA) - Requer CUDA Toolkit compatível! 
-tabulate==0.9.0 
+transformers>=4.30.0
+datasets>=2.12.0
+peft>=0.4.0
+accelerate>=0.20.0
+bitsandbytes>=0.39.0
+pandas>=1.5.0
+matplotlib>=3.5.0
+seaborn>=0.12.0
+tabulate>=0.9.0
+tqdm>=4.65.0
+scikit-learn>=1.2.2
+psutil>=5.9.0
+fdb>=2.0.0
+streamlit>=1.20.0
