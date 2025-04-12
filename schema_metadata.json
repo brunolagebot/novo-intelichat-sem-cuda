@@ -610,6 +610,3085 @@
                     "value_mapping_notes": ""
                 }
             }
+        },
+        "ABATE_SEQUENCIAL": {
+            "description": "",
+            "COLUMNS": {
+                "ASE_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_API_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_SEQ_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_SEQ_REGISTRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_IDENTIFICADOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_SEXO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_MATURIDADE_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_MATURIDADE_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_MATURIDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_DATA_HORA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_USUARIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_DATA_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_PDI_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_DIF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_TIPIFICACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_ANIMAL_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_ANIMAL_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_ANIMAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_MAT_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_MAT_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_MAT": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_RACA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_ACAB_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_ACAB_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_ACAB": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_CONF_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_CONF_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_CONF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_CONTUSAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_CONTUSAO_GRAU": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_CONTUSAO_QUARTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_TIPI_DATA_HORA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_TIPI_USUARIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_RACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_SEQ_LOTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_HABILITACAO_CALHA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_HABILITACAO_TIPIFICACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_MOT_DESC_CALHA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_MOT_DESC_TIPIFICACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_ANIMAL_CALHA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_ABERTO_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_MOTIVO_DIF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_SITUACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ASE_LEITOR_DATA_HORA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                }
+            }
+        },
+        "ABATE_PESAGEM_ITEM": {
+            "description": "",
+            "COLUMNS": {
+                "ABI_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ID_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ID_IT_PED": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_SEQ_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_SEQ_LOTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ANIMAL_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ANIMAL_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ANIMAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_BANDA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PESO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_DATA_PESAGEM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CLASSE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PROD_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PROD_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PROD_DIANTEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ETIQ_DIANTEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PESO_DIANTEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_SAIDA_DIANTEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PROD_TRASEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ETIQ_TRASEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PESO_TRASEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_SAIDA_TRASEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PROD_PA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ETIQ_PA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PESO_PA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_SAIDA_PA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_COD_RASTRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_IDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_VALIDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_SEQUESTRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_COD_CARC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PESO_BRUTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PRECOCE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_COD_CAMARA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_RACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ACABAMENTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CONF_CARCACA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_DENTES": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_RASTR_BOV": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CONTUSAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CONTUSAO_GRAU": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CONTUSAO_QUARTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_MULTILACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_MULTILACAO_GRAU": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_MULTILACAO_QUARTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CUPIM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_TF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_SALGA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_GRAXARIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CONSERVA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_TRAS_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_DIANT_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_PA_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_DIF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_SITUACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CLASS_INTERNA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_INTEGRACAO_NFE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_INTEGRACAO_NFS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_USUARIO_PESAGEM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_USUARIO_BAIXA_TRAS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_USUARIO_BAIXA_DIAN": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_USUARIO_BAIXA_PA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_CUSTO_TRAS_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_CUSTO_DIANT_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_CUSTO_PA_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_REPROCESSAR_ESTOQUE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_MOV_TRAS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_MOV_DIANT": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_MOV_PA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_SEQ_GERAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ABERTO_DIANTEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ABERTO_TRASEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ABERTO_PONTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_REPROCESSADO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_LAYOUT_ETIQUETA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_QTDE_TRAS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_CUSTO_TRAS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_QTDE_DIAN": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_CUSTO_DIAN": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_QTDE_PA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ESTOQUE_CUSTO_PA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ASE_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_SISBOV": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_RACA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ETIQUETA_IMPRESSA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PES_QUEBRA_USUARIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PES_QUEBRA_DATA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PES_QUEBRA_PESO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PES_QUEBRA_PESO_ASP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PES_QUEBRA_ETIQUETA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_MOTIVO_SEQUESTRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_HABILITACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PES_QUEBRA_MAQUINA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CF_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CF_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CF_PROPRIETARIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_DATA_BLOQUEIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_DATA_LIBERACAO_BLOQ": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_USUARIO_BLOQUEIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_USUARIO_LIBERACAO_BLOQ": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_MOTIVO_BLOQUEIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ASSEXUADO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PES_QUEBRA_ID_PALLET": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_TIPO_OPERACAO_BALANCA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_STRING_BALANCA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_INTEGRACAO_PED_RET": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PULMAO_TRASEIRO_DATA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PULMAO_TRASEIRO_USUARIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PULMAO_TRASEIRO_MAQUINA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PULMAO_DIANTEIRO_DATA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PULMAO_DIANTEIRO_USUARIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PULMAO_DIANTEIRO_MAQUINA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PULMAO_PA_DATA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PULMAO_PA_USUARIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PULMAO_PA_MAQUINA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PULMAO_PA_ID_PALLET": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PRECOCE_DESCLASSIFICACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ABERTO_DIANTEIRO_CARCACA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ABERTO_TRASEIRO_CARCACA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_ABERTO_PONTA_CARCACA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_BLOQUEADO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CUSTO_TRASEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CUSTO_DIANTEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CUSTO_PA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CUSTO_TRASEIRO_REAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CUSTO_DIANTEIRO_REAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_CUSTO_PA_REAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PESO_FRIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_INTEGRACAO_NFS_COURO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PULMAO_TRASEIRO_PESO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PULMAO_DIANTEIRO_PESO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_PULMAO_PA_PESO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_IMP_COPIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_IMP_USUARIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_IMP_DATAHORA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                }
+            }
         }
-    }
+    },
+    "VIEWS": {
+        "VIEW_ABATI_COMISSAO": {
+            "description": "",
+            "COLUMNS": {
+                "ABA_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABA_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABA_DATA_EMBARQUE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABA_VENDEDOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_NOME": {
+                    "description": "Certainly! Here is a concise Portuguese description for the column in the database called 'VEND_NOME' of type 'VARCHAR(50)' that belongs to the 'VIEW_DASH_VENDAS' table. It would likely mean something like \"a field for storing names, typically 50 characters long, associated with purchases made through the 'VIEW_DASH_VENDAS' table.",
+                    "value_mapping_notes": ""
+                },
+                "ABA_TRANS_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABA_TRANS_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABA_TRANSPORTADOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "TRANS_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABA_OBS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                }
+            }
+        },
+        "VIEW_DASH_ESCALA_ABATE": {
+            "description": "A VIEW_DASH_ESCALA_ABATE que se usa no banco de dados pode ser uma tarefa complexa, pois ela não contém nenhuma coisa relacionada com negócio e só tem como objeto trazer os dados específicos para a tarefa escolhida. Assim, não há informações sobre o propósito do negócio.",
+            "COLUMNS": {
+                "ABP_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABP_DATA_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABP_OBS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GPC_PEDIDO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GPC_TIPO_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LOTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "SEQ": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "API_ORDEM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "API_HORA_PREV_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "API_CURRAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GPC_CURRAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GPC_DATA_CHEGADA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GPC_HORA_CHEGADA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_RAZAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SIGLA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CFE_LOCALIDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CIDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CID_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CID_UF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "QTDE_MACHO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "QTDE_MACHO_INTEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "QTDE_FEMEA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "QTDE_TOURO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "QTDE_VITELO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "QTDE_NOVILHA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "QTDE_BOVINO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "QTDE_SUINO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "QTDE_BUBALINO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "QTDE_OVINO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "API_QTDE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GPC_CERTIFICADORA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ANI_ESPECIE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "SEQ_INICIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "SEQ_FINAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_MARCHANTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NOME_MARCHANTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FERRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "API_OBS_CURRAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GPC_TEMPO_VIAGEM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "MOTIVO_DESC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GPC_HABILITACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CHM_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "MERCADO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "HAB1": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "HAB2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "HAB3": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "HAB4": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "HAB5": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "COMPRADOR_NOME": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CONDPDTO_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRECO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GPC_OSERVACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ID_ITEM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GPC_PRECOCE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "SIGLA_FATEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "SIGLA_CID_MARCHANTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                }
+            }
+        },
+        "VIEW_PRODUTOS": {
+            "description": "A VIEW_PRODUTOS em português brasileiro é uma tela de dados que permite visualizar informações relacionadas às vendas, como o produto, a empresa onde foi fabricado, a filiação do produto, o tipo de produto, o código de produto, o grupo da empresa responsável pela fabricação, o desenho geral de vendas e até mesmo sub-grupos de produtos. Ao contrário de outras tabelas de dados, os dados são exibidos em ordem de grandeza e não dependendo do ordenamento da tabela original. A intenção geral do negócio é apreço-la como um tool para visualizar informações relacionadas às vendas.\n\nOs dados estão organizados de tal maneira que se pode facilitar uma comparação bem-sucedida de diferentes produtos, empresas e grupos. É acessível para fazer tarefas como analise, preenchimento de formulários ou pesquisa de negócio.",
+            "COLUMNS": {
+                "PRODUTO_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_TIPO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_CODIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_GRUPO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GRUPO_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_SUBGRUPO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GRUPO_CONTABIL_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GRUPO_CONTABIL_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GRUPO_CONTABIL_EXERCICIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GRUPO_CONTABIL_REDUZIDO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GRUPO_CONTABIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "SUBGRUPO_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_ATIVO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_MARCA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "MARCA_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_LESTOQUE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LOCAL_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_UNIDADE_CV": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_MULTIPLO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_UNIDADE_EST": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_ESTOQUE_MIN": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_ESTOQUE_MAX": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_PESO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_REG_MIN_AGR_SAUDE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_SUBST_TRIBUTARIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_CLASS_FISCAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_ICMS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_GARANTIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_IPI": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_ONU": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_CLASSE_RISCO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_NUM_RISCO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_LCLASS_FISCAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_PIS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_COFINS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_PRECO_LIVRE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_CONTROLE_QTDE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_LESTOQUE_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_DESCRICAO2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_CBARRA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_COD_AUXILIAR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_COD_IMPORTACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_INTEGRA_AIS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                }
+            }
+        },
+        "VIEW_PEDIDO": {
+            "description": "",
+            "COLUMNS": {
+                "PED_EMPRESA": {
+                    "description": "\n- PED_EMPRESA é um inteiro que representa o número de empresas registradas no banco de dados.\n- Ele pode variar de acordo com a natureza do sistema e ser usado para identificar novos ou antigos contribuintes.\n- São chamados de \"PEDIDO\" (VIEW) e representam acesso às operações de criação, modificação e consulta de dados.",
+                    "value_mapping_notes": ""
+                },
+                "PED_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_SERIE_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_SERIE_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_SERIE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_NUMERO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_DATA_EMISSAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_DATA_ENTREGA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_TAXA_JUROS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_CLIENTE_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_CLIENTE_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_CLIENTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_RAZAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CIDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ICMS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_CIDADE_COBRANCA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CID_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CID_UF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_VALOR_PRODUTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_VALOR_PEDIDO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_VALOR_SERVICO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_VENDEDOR_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_VENDEDOR_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PED_VENDEDOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_NOME": {
+                    "description": "Certainly! Here is a concise Portuguese description for the column in the database called 'VEND_NOME' of type 'VARCHAR(50)' that belongs to the 'VIEW_DASH_VENDAS' table. It would likely mean something like \"a field for storing names, typically 50 characters long, associated with purchases made through the 'VIEW_DASH_VENDAS' table.",
+                    "value_mapping_notes": ""
+                },
+                "PED_SITUACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PEN_DATA_EMBARQUE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NAT_ICMS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                }
+            }
+        },
+        "VIEW_DASH_CLIENTE": {
+            "description": "View Dash Cliente\" ou simplesmente \"VIEW_DASH_CLIENTE\" é um projeto de software para o qual temos como objetivo tornar mais eficiente o uso da informação estruturada em banco de dados. O projeto visa aplicar tecnologias de datação para manter a integridade do sistema, enfatizar a proteção dos dados e garantir que as tabelas sejam alteradas apenas quando esperado.\n\nOs dados colhidos podem ser alimentados por um programa chamado \"Dash\" que permite ao usuario conhecer a estrutura do banco de dados e atualizar suas consultas para melhorar o desempenho da operação.\n\nAs colunas são: \n\n- CONDPGTO_CODIGO - Código de conteúdo da tabela\n- CONDPDTO_DESCRICAO - Descrição do código de conteúdo\n- VEND_CODIGO - Código do VENDEDOR responsável por atender o cliente\n- VEND_NOME - Nome do VENDEDOR responsável pelas vendas ao cliente\n- CF_EMPRESA - Empresa responsável pelo serviço\n- CF_FILIAL - Filial da empresa responsável pelo serviço\n- CF_CODIGO - Código do cliente no nosso sistema\n- CF_DATA - Data que foi realizada a operação de cadastro do cliente\n- CF_RAZAO - Razão social do cliente\n- CF_FANTASIA - Nome fantasia é o nome popular, o nome pelo qual a empresa se apresenta publicamente.\n\nAs funções do projeto podem variar dependendo da empresa e aplicação necessitada, porém, o objetivo principal é tornar o uso de dados mais eficiente e garantir que eles não serem modificados sempre que seja um bom gerente.",
+            "COLUMNS": {
+                "CONDPGTO_CODIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CONDPDTO_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_CODIGO": {
+                    "description": "One possible description in Portuguese Brazilian for the column named 'VEND_CODIGO' of type 'INTEGER' that belongs to the object 'VIEW_DASH_CLIENTE' (VIEW) is:\n\n\"A coluna que armazena um número do tipo INTEGER e pertencia ao objeto VIEW_DASH_CLIENTE.\"\n\nThis translates to:\n\n\"A column that stores an integer type number and belonged to the object VIEW_DASH_CLIENTE.",
+                    "value_mapping_notes": ""
+                },
+                "VEND_NOME": {
+                    "description": "Certainly! Here is a concise Portuguese description for the column in the database called 'VEND_NOME' of type 'VARCHAR(50)' that belongs to the 'VIEW_DASH_VENDAS' table. It would likely mean something like \"a field for storing names, typically 50 characters long, associated with purchases made through the 'VIEW_DASH_VENDAS' table.",
+                    "value_mapping_notes": ""
+                },
+                "CF_EMPRESA": {
+                    "description": "É o código da nossa empresa. ",
+                    "value_mapping_notes": "1 por enquanto corresponde à única empresa que tem dados no banco de dados. O Frigorífico Fazcarne"
+                },
+                "CF_FILIAL": {
+                    "description": "É o código da filial da empresa responsável pelos dados.",
+                    "value_mapping_notes": "1 por enquanto é a única filial da única empresa que tem os dados."
+                },
+                "CF_CODIGO": {
+                    "description": "Código do cliente cadastrado. Por cliente, pode ser cliente ou fornecedor, o campo de cadastro é o mesmo.",
+                    "value_mapping_notes": ""
+                },
+                "CF_DATA": {
+                    "description": "Data em que foi realizado o cadastro do cliente no sistema do Frigorífico.",
+                    "value_mapping_notes": ""
+                },
+                "CF_RAZAO": {
+                    "description": "One possible description in Portuguese for the column 'CF_RAZAO' in the database table 'VIEW_DASH_CLIENTE' of type 'VARCHAR(100)' that belongs to the view 'VIEW_DASH_CLIENTE' (View) is:\n\n- 'Caracteres de armazenamento comum' ou 'Common Characters'.\n\nThis refers to a character set that is used to represent characters that cannot be stored in a single byte or octet. In this case, it is likely referring to the Unicode encoding standard.\n\nEste é o nome do cliente, sua Razão Social, ou seja, o nome oficial da empresa que tem o cadastro em nossa empresa.",
+                    "value_mapping_notes": ""
+                },
+                "CF_FANTASIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ICMS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CPF_CGC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_RG_IE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ENDERECO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_BAIRRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CIDADE_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CIDADE_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CIDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CID_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CEP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CXPOSTAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CEP_CXPOSTAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FONE1": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FONE2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FAX": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FAX2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EMAIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_BANCO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_AGENCIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TITULAR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_OBSERVACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_OBSERVACAO2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ATIVO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NASCIMENTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TIPO_INSCR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_POSITIVA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_AREA_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_AREA_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_AREA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ENDERECO2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_BAIRRO2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_REVENDA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_REFERENCIA_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_REFERENCIA_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_REFERENCIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CIDADE2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CEP2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CXPOSTAL2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LC_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LC_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LOCAL_COBRANCA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TC_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TC_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TIPO_COBRANCA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_RESPONSAVEL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ENDERECO3": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_BAIRRO3": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CIDADE3": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CEP3": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DIA_PGTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TRANSPORTADORA_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TRANSPORTADORA_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TRANSPORTADORA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FRETE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_REDESPACHO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FONE3": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ENDERECO4": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FRETE2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_BAIRRO4": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CIDADE4": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CEP4": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_OBSERVACAO3": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ATIVIDADE_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ATIVIDADE_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ATIVIDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CEP_CXPOSTAL2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_AGENCIA2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTATO4": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COD_ANTIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DIG_ANTIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CLIENTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FORNECEDOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_OUTROS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DATA_LIBERAR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_BLOQUEAR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COND_PAGTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_QTDE_PARCELAS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DIAS_INTERVALO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PARCELA_VISTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LIMITE_CREDITO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PRAZO_MAXIMO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TIPO_LISTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FAIXA_PRAZO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NRO_ENTREGA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DATA_ALT": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ROTA_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ROTA_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ROTA_CLI": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FOR_GADO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FOR_AB_DIST": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PERC_VENDA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LINHA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CLIENTE_VINCULO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NRO_END": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTABIL_REDUZIDO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTABIL_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTABIL_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTABIL_EXERCICIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTABIL_CLI_RED": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTABIL_CLI": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTABIL_FOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NRO3": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NRO_BANCO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EMAIL_NFE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SUFRAMA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ATUALIZA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_IM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EH_PARTICIPANTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DESCONTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CODIGO_IMPORTACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COND_PGTO_COMPRA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COND_PGTO_VENDA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ZONA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CIDADE_IMPORTACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLI_UF_IMPORTACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CID_COB_IMPORTACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_UF_COB_IMPORTACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CID_ENTR_IMPORTACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_UF_ENTR_IMPORTACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NRO_END2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COMPLEMENTO_ENDER": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_OPERACAO_PADRAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NAO_RETER_ISS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COD_IMPORTACAO_FOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LC_ADIANT_BAIXA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_HISTORICO_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_HISTORICO_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_HIST_ADIANT_BAIXA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LISTA_PRECO_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LISTA_PRECO_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LISTA_PRECO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ULT_GRAVACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONSUM_FINAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COD_IMPORTACAO_CLI": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PROSPECCAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COD_IMPORTACAO_VEN": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TX_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FRETE_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PERIODO_ENTREGA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONVIS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_HORAS_CREDITO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_VALOR_HORA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_VALOR_COURO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CODIGO_DIGITO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_REGIME_ESP_UF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SIMPLES_NACIONAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ABAT_PAGAMENTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NAO_CALCULA_ST": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_BAIRRO_CODIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_BAIRRO_CODIGO2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_BAIRRO_CODIGO3": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_BAIRRO_CODIGO4": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PERC_DEV_FRETE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PERC_REENT_FRETE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_MOD_LAYOUT_EDI_CON": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EDI_OCORRENCIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EDI_EMBARQUE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EDI_COBRANCA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_REMET_PROCEDA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DEST_PROCEDA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_MASC_EDI": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PARCERIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EDI_PREFATURA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PERC_FRETE_PARC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PERC_PESO_PARC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COM_MIN_PARC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ROTEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NAO_ENVIAR_DANFE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NAO_EMITE_DANFE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COD_IMP_PERC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EXPORTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ROTA_ORDEM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ENTREGA_DIFICIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FERRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DESC_BLOQUETO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DISTANCIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PARCEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTABIL_ADI_COD": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTABIL_ADI_RED": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_MARCHANTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LISTA_PRECO_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LISTA_PRECO_AB_FRETE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FRETE_ABATE_ZERADO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CARIMBO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TIPO_EMB_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TIPO_EMB_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TIPO_EMBALAGEM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ACORDO_COMERCIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LC_EST_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LC_EST_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LC_EST": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NRO_ARQUIVO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SERASA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ENVIO_ARQUIVO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PROTESTADO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_RETENCOES": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LISTA_PRECO_FAT_INTEGRADO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_QTDE_DIAS_ENTREGA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SERV_DESC_COMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SOCIO_CLUB": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TP_TIT_CLUB": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SOCIO_CLUB_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SOCIO_CLUB_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PROFISSAO_CBO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ACRESC_TAXA_COLETA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NAT_OP_SAIDA_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NAT_OP_SAIDA_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NAT_OP_SAIDA_PADRAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NAO_LISTAR_POSICOES": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NAO_AGRUPAR_CTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TIPO_DESSOSA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LISTA_PRECO_DESOSSA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_VALOR_DESOSSA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EMPRESA_RESP_FRETE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FILIAL_RESP_FRETE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DIFICIL_ACESSO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SEGURO_RCTRC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SEGURO_RCFDC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EXIGE_CUBAGEM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EXIGE_PESAGEM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTABIL_CLI_PART": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_VALOR_VISCERA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LISTA_PRECO_COURO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LISTA_PRECO_VISCERA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_MOD_RET_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_MOD_RET_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_MOD_RET_CODIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_MOD_RET_CODIGO_FEMEA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TIPO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "TIPO_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NAO_TROCA_LC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SOCIO_NRO_TITULO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NAO_SUBTRAI_RETENCOES": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CLIENTE_VENDA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_VALOR_VENDA_KG": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_MOD_VENDA_MACHO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_MOD_VENDA_FEMEA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_VALOR_VENDA_KG_FEM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_VALOR_VENDA_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_VALOR_VENDA_COURO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COND_PGTO_VENDA_SUINO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_VERIFICACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_VR_HORA_DESENV": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_VR_HORA_CONSULTORIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NOVO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_AVALISTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EXIBIR_LAYOUT_TT": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_MSG_PORTUGUES": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_MSG_INGLES": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_MSG_ESPANHOL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LOCAL_COBR_VENDA_SUINO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COND_PGTO_FAT_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LOCAL_COBR_FAT_ABATE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CALC_ST_REG_ESPECIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COD_SAP_TRANSPORTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COMISSAO_GERAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CPF_CGC_IMPORTACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PERC_DESCONTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PERC_VENCER": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PECUARISTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_RG_ORGAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_RG_EMISSAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SEXO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NATUREZA_CIDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NATUREZA_UF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PROFISSAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ESTADO_CIVIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DATA_CASAMENTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LOCAL_TRABALHO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FONE_TRABALHO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CIDADE_TRABALHO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CNAE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_REFERENCIA_CF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_RESTRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TIPO_FRETE_CIF_FOB": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_TX_CARGA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_TX_DESCARGA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_PERIODO_INI": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_PERIODO_QTDE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_PRAZO_EST": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_COND_PAGTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_PRECO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_SEGURO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_FORA_HORA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_PRECO_CROSS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_AIS_USUARIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_AIS_SENHA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_AIS_BANCO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_AIS_IP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PERC_FUNRURAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PERC_FUNDESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_GERENTE_VENDA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GERENTE_NOME": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ASSOCIADO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NAO_COBRAR_MULTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PERC_IQS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DATA_FUNDACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COND_PGTO_FAT_ABATE_OLD": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COND_PGTO_VENDA_OLD": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COND_PGTO_VENDA_SUINO_OLD": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LIMITE_CREDITO_EXTRA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LIMITE_EX_VALIDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TICKET_PESAGEM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_PRECO_TIPO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_PRECO_CROSS_TIPO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_PRECO_MOV": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_PRECO_MOV_TIPO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_PRECO_PALLETIZ": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_FORA_HORA_H": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CVF_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PERC_CONTRATO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DT_FUSAO_CERT": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LIMITE_CREDITO_OLD": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LIMITE_CREDITO_EXTRA_OLD": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LIMITE_EX_VALIDADE_OLD": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DATA_ALT_LIMITE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DATA_ALT_LIM_EX": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DESC_PREC_VENDA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DT_ENTREGA_CERT": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_PRECO_LOCACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_PRECO_DEVOLUCAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONFIG_SMTP_EMAIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONFIG_SMTP_USER": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONFIG_SMTP_SENHA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONFIG_SMTP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONFIG_SMTP_PORTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PERC_SENAR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SIF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PED_CLIENTE_OBRIGATORIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ISENT_FUNRURAL_SENAR_INICIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ISENT_FUNRURAL_SENAR_FIM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_OBRIGATORIO_MDFE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CPF_CNPJ_INFO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_OPTANTE_CPRB": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LIMITE_CLIENTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SERASA_DATA_ENVIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_END_LATITUDE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_END_LONGITUDE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_ISS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CFJAL_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_MERCOS_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONVIS_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PROD_SIT_ESPECIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PROD_DT_SIT_ESPECIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PROD_FORMA_APUR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_GILRAT": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TP_INSCRICAO_FUNRURAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_INDICATIVO_FUNRURAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PRODUTOR_IND_AQUISICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ADAB": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ORGAO_INSPETOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COD_CERTIFICACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_VALIDADE_CERTIFICACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NOTA_CERTIFICACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SEQ_ETIQUETA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ID_TRAY": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LONGITUDE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LATITUDE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_STATUS_LOCAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_INTEGRA_TRAY": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_GERAR_SENAR_SEPARADO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PROD_QUIMICO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_IDEXTRATTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EXTRATTA_MENSAGEM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EXTRATTA_DATA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FLUXO_EMP_GRUPO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_REPRESENTANTE_OLD": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DATA_TROCA_REPRESENTANTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_USUARIO_TROCA_REPRES": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ARMAZ_SEGURO_TIPO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PLOOMES_INTEGRANDO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PLOOMES_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PLOOMES_INTEGRAR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_PLOOMES_DATA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_VALOR_MINIMO_COMPRA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EAN_COMPRADOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EAN_ENTREGA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_EAN_COBRANCA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DUN14_NFE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_LGPD": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TXT_ROMANEIO_ENVIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TXT_ROMANEIO_LAYOUT": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TXT_ROMANEIO_EMAIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_DESCONTO_LISTA_PR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ENTREGA_SEG": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ENTREGA_TER": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ENTREGA_QUA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ENTREGA_QUI": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ENTREGA_SEX": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ENTREGA_SAB": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_ENTREGA_DOM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_BLOQUEIA_EXPEDICAO_MAIOR_PED": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_WHATSAPP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_SIGLA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTABIL_MARC_ICMS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTABIL_MARC_ICMS_RED": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTABIL_MARC_FUNR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONTABIL_MARC_FUNR_RED": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_NAO_EXIBIR_MEDIA_PONDERADA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CREA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CONVENIO_ICMS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_INTEGRADO_ZION": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_BITRIX_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CALCULAR_ICMS_ST_ANTERIOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_COMPRADOR_FATO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FATEIRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_BLOQ_SEM_VISTO_LIMITE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ROT_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                }
+            }
+        },
+        "VIEW_DASH_ENTRADA_DESOSSA": {
+            "description": "Esta tabela identifica a matéria prima que ingressou na desossa. É o setor onde o frigorífico transforma produtos. Em regra entram produtos para serem manipulados, desossados ou industrializados.\nÉ possível saber detalhes dos produtos que entraram no setor, bem como sua origem, seu código, descrição, a data de produção, data de validade, peso, qual foi o fornecedor, seu sequencial de abate, o número (ID) da ordem de produção (OP).\n",
+            "COLUMNS": {
+                "COD_OP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "COD_DATA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CODIGO": {
+                    "description": "Código do cliente cadastrado. Por cliente, pode ser cliente ou fornecedor, o campo de cadastro é o mesmo.",
+                    "value_mapping_notes": ""
+                },
+                "CF_RAZAO": {
+                    "description": "One possible description in Portuguese for the column 'CF_RAZAO' in the database table 'VIEW_DASH_CLIENTE' of type 'VARCHAR(100)' that belongs to the view 'VIEW_DASH_CLIENTE' (View) is:\n\n- 'Caracteres de armazenamento comum' ou 'Common Characters'.\n\nThis refers to a character set that is used to represent characters that cannot be stored in a single byte or octet. In this case, it is likely referring to the Unicode encoding standard.\n\nEste é o nome do cliente, sua Razão Social, ou seja, o nome oficial da empresa que tem o cadastro em nossa empresa.",
+                    "value_mapping_notes": ""
+                },
+                "COD_OBS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CDM_PROD": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUCAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VALIDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABP_NRO_LOTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PESO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "MEDIA": {
+                    "description": "A coluna de banco de dados chamada 'MEDIA' do tipo 'DOUBLE PRECISION' que pertence ao objeto 'VIEW_DASH_VENDAS' (TABLE) pode ser descrita como uma coluna de dados numéricos armazenado em um banco de dados que apresenta informações sobre o valor da informação de dados armazenados no banco de dados.",
+                    "value_mapping_notes": ""
+                },
+                "COD_ETIQUETA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "COD_FORNECEDOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "FORNECEDOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ABI_SEQ_LOTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "STATUS_OP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CUSTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                }
+            }
+        }
+    },
+    "_GLOBAL_CONTEXT": "encara cada etapa com rigor e questionamento. Nossa atividade começa na aquisição dos animais, selecionados em fazendas parceiras que mantêm práticas tradicionais de criação. Não confiamos cegamente em etiquetas modernas: conferimos de perto a condição e procedência dos bovinos, sempre perguntando se a escolha atende aos padrões de qualidade que aprendemos a valorizar ao longo dos anos.\n\nNo abate, a prioridade é respeitar o bem-estar animal e garantir eficiência. Observamos cada detalhe para otimizar rendimentos e evitar desperdícios. Cada escolha – do manejo inicial à inspeção final – é orientada por anos de experiência, mas sempre com um pé atrás para verificar se todo procedimento ainda faz sentido nos dias de hoje.\n\nA desossa segue o mesmo espírito: separação meticulosa dos cortes, sem abrir mão do cuidado que quem faz isso há gerações sabe ter. Aqui, nada se perde. Cortes com osso, cortes desossados, miúdos e subprodutos são todos aproveitados, cada um com seu valor bem calculado. Controlamos custos e preços médios a partir dos dados das notas fiscais, verificando se o rendimento e a lucratividade realmente batem com nossa análise crítica e com a tradição de vender produtos de alta qualidade.\n\nPor fim, nos orgulhamos de oferecer uma variedade de opções ao mercado: desde a carne com osso, que mantém o sabor consagrado, até miúdos e subprodutos, essenciais para atender diferentes demandas. Tudo isso preservando o jeito de trabalhar que nos trouxe até aqui, mas sem deixar de questionar continuamente cada passo do processo. No Frigorífico Fazcarne, tradição e análise constante andam lado a lado para garantir carne confiável e segura, apoiada na experiência de quem faz isso há décadas.\n"
 }

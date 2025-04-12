@@ -202,25 +202,48 @@ def generate_ai_description(prompt):
         st.error(f"Erro ao contatar a IA: {e}")
         return None
 
+def find_existing_description(metadata, target_col_name):
+    """Procura por uma descrição existente para um nome de coluna em todo o metadado."""
+    if not metadata or not target_col_name:
+        return None
+    # Procura em Tabelas
+    for table_name, table_meta in metadata.get('TABLES', {}).items():
+        col_meta = table_meta.get('COLUMNS', {}).get(target_col_name)
+        if col_meta and col_meta.get('description'):
+            logger.debug(f"Encontrada descrição existente para '{target_col_name}' na tabela '{table_name}'")
+            return col_meta['description']
+    # Procura em Views
+    for view_name, view_meta in metadata.get('VIEWS', {}).items():
+        col_meta = view_meta.get('COLUMNS', {}).get(target_col_name)
+        if col_meta and col_meta.get('description'):
+            logger.debug(f"Encontrada descrição existente para '{target_col_name}' na view '{view_name}'")
+            return col_meta['description']
+    return None # Não encontrado
+
 # --- Inicialização do Estado da Sessão (AGORA DEPOIS DAS FUNÇÕES) --- 
 if 'db_password' not in st.session_state:
-    st.session_state.db_password = "" # Senha não usada mais aqui, mas mantendo por consistência
+    st.session_state.db_password = ""
 if 'metadata' not in st.session_state:
-    # Carrega metadados na inicialização da sessão
-    # Agora load_metadata já está definida
     st.session_state.metadata = load_metadata(METADATA_FILE)
-    logger.info("Metadados carregados para session_state na inicialização.")
+    # Garante que as chaves de nível superior existam após o carregamento inicial
+    st.session_state.metadata.setdefault('TABLES', {})
+    st.session_state.metadata.setdefault('VIEWS', {})
+    st.session_state.metadata.setdefault('_GLOBAL_CONTEXT', 'Digite aqui informações gerais sobre a empresa, o propósito do banco de dados, etc.')
+    logger.info("Metadados carregados para session_state (com chaves de nível superior garantidas).")
 
 # --- Função Principal da Aplicação --- 
 def main():
     st.set_page_config(page_title="Anotador de Esquema Firebird", layout="wide")
     st.title("📝 Anotador de Esquema Firebird")
 
-    # Garante que metadados estão no estado da sessão (se não, recarrega)
-    # Esta verificação pode ser redundante devido à inicialização acima, mas segura
+    # Garante que metadados e chaves principais estão no estado da sessão
     if 'metadata' not in st.session_state:
         st.session_state.metadata = load_metadata(METADATA_FILE)
         logger.info("Metadados (re)carregados para session_state dentro de main.")
+    # Garante as chaves de nível superior toda vez que main rodar
+    st.session_state.metadata.setdefault('TABLES', {})
+    st.session_state.metadata.setdefault('VIEWS', {})
+    st.session_state.metadata.setdefault('_GLOBAL_CONTEXT', 'Digite aqui informações gerais sobre a empresa, o propósito do banco de dados, etc.')
 
     schema_data = load_schema(SCHEMA_FILE)
     if not schema_data:
@@ -233,14 +256,24 @@ def main():
     # Senha não fica na sidebar, será pedida no expander
 
     st.sidebar.divider()
+    # **NOVO: Campo para Contexto Geral**
+    st.sidebar.subheader("Contexto Geral")
+    context_key = "global_context_input"
+    st.session_state.metadata['_GLOBAL_CONTEXT'] = st.sidebar.text_area(
+        "Descreva o contexto geral da empresa/dados:",
+        value=st.session_state.metadata.get('_GLOBAL_CONTEXT', 'Informações sobre a empresa, propósito do DB...'), # Pega do state ou default
+        key=context_key,
+        height=150
+    )
+
+    st.sidebar.divider()
     # Botão Salvar na Sidebar
-    if st.sidebar.button("💾 Salvar Metadados", use_container_width=True):
+    if st.sidebar.button("💾 Salvar Metadados e Contexto", use_container_width=True):
         if save_metadata_to_file(st.session_state.metadata, METADATA_FILE):
-            st.sidebar.success("Metadados salvos com sucesso!")
-            # Limpar cache de load_metadata não é necessário pois está na session_state
+            st.sidebar.success("Metadados e Contexto salvos!")
         else:
-            st.sidebar.error("Falha ao salvar metadados.")
-    st.sidebar.caption(f"Os metadados serão salvos em: {METADATA_FILE}")
+            st.sidebar.error("Falha ao salvar.")
+    st.sidebar.caption(f"Salvo em: {METADATA_FILE}")
     sample_size_input = st.sidebar.number_input("Tamanho da Amostra (Preview/Final)", min_value=1, max_value=100, value=DEFAULT_SAMPLE_SIZE)
 
     # --- Conteúdo Principal ---
@@ -274,12 +307,11 @@ def main():
         key_type = object_type + "S"
         st.header(f"Anotando: `{selected_object}` ({object_type})")
 
-        # **NOVO: Buscar amostra ao selecionar o objeto e guardar no session_state**
+        # --- MOVIDO: Buscar e Exibir Amostra de Dados Completa PRIMEIRO --- 
         sample_data_key = f"sample_data_{selected_object}"
         if sample_data_key not in st.session_state:
             logger.info(f"Buscando amostra para {selected_object} pela primeira vez nesta sessão.")
-            # Usar senha hardcoded
-            password_to_use = "M@nagers2023"
+            password_to_use = "M@nagers2023" # Senha hardcoded
             with st.spinner(f"Buscando amostra de dados para {selected_object}..."):
                  st.session_state[sample_data_key] = fetch_sample_data(
                     db_path=db_path_input,
@@ -287,25 +319,42 @@ def main():
                     password=password_to_use,
                     charset=DEFAULT_DB_CHARSET,
                     table_name=selected_object,
-                    sample_size=sample_size_input # Usa o tamanho da sidebar
+                    sample_size=sample_size_input
                 )
-        # Recupera a amostra do estado da sessão (pode ser None se falhou)
         sample_df = st.session_state.get(sample_data_key, None)
-        if sample_df is None:
-            st.warning(f"Não foi possível carregar amostra de dados para '{selected_object}'. Verifique a conexão ou logs.")
-        elif sample_df.empty:
-             st.info(f"Amostra de dados para '{selected_object}' está vazia (0 linhas retornadas).")
 
-        # --- Anotação da Tabela/View ---
+        st.subheader("Amostra de Dados (Preview)")
+        if sample_df is not None:
+            if not sample_df.empty:
+                st.dataframe(sample_df, use_container_width=True)
+            else:
+                st.info(f"Amostra de dados para '{selected_object}' está vazia (0 linhas retornadas).")
+        else:
+             st.warning(f"Não foi possível carregar amostra de dados para '{selected_object}'.")
+        st.divider()
+        # --- Fim da Seção de Amostra --- 
+
+        # --- Anotação da Tabela/View --- 
         st.subheader("Descrição Geral do Objeto")
-        # Garante estrutura no session_state
-        st.session_state.metadata.setdefault(key_type, {})
-        st.session_state.metadata[key_type].setdefault(selected_object, {})
-        st.session_state.metadata[key_type][selected_object].setdefault('description', '')
+        
+        # Abordagem mais segura para garantir a estrutura no session_state
+        # 1. Garante que 'TABLES' ou 'VIEWS' existe
+        if key_type not in st.session_state.metadata:
+            st.session_state.metadata[key_type] = {}
+        # 2. Garante que o dicionário para o objeto selecionado existe
+        if selected_object not in st.session_state.metadata[key_type]:
+            st.session_state.metadata[key_type][selected_object] = {}
+        # 3. Garante que a chave 'description' existe dentro do dicionário do objeto
+        if 'description' not in st.session_state.metadata[key_type][selected_object]:
+             st.session_state.metadata[key_type][selected_object]['description'] = ''
+        # 4. Garante que a chave 'COLUMNS' existe dentro do dicionário do objeto
+        if 'COLUMNS' not in st.session_state.metadata[key_type][selected_object]:
+            st.session_state.metadata[key_type][selected_object]['COLUMNS'] = {}
 
         col1, col2 = st.columns([4, 1]) # Coluna maior para text area, menor para botão
         with col1:
             table_desc_key = f"desc_{object_type}_{selected_object}"
+            # Agora podemos acessar diretamente, pois garantimos que existe
             st.session_state.metadata[key_type][selected_object]['description'] = st.text_area(
                 label="Descreva o propósito desta tabela/view:",
                 value=st.session_state.metadata[key_type][selected_object]['description'],
@@ -372,19 +421,24 @@ def main():
                 st.rerun() # Reroda para exibir todas as sugestões nos campos
 
         # --- Anotação das Colunas ---
-        st.subheader("Colunas e Descrições")
+        st.subheader("Colunas, Exemplos e Descrições")
         if object_info.get('columns'):
-            st.session_state.metadata[key_type][selected_object].setdefault('COLUMNS', {})
+            object_columns_metadata = st.session_state.metadata[key_type][selected_object]['COLUMNS']
             for col in object_info['columns']:
                 col_name = col['name']
                 col_type = col['type']
                 col_nullable = col['nullable']
-
-                st.session_state.metadata[key_type][selected_object]['COLUMNS'].setdefault(col_name, {})
-                st.session_state.metadata[key_type][selected_object]['COLUMNS'][col_name].setdefault('description', '')
-                st.session_state.metadata[key_type][selected_object]['COLUMNS'][col_name].setdefault('value_mapping_notes', '')
-
-                # Exibe nome, tipo e explicação
+                
+                # Garante a estrutura para esta coluna específica
+                if col_name not in object_columns_metadata:
+                    object_columns_metadata[col_name] = {}
+                current_col_metadata = object_columns_metadata[col_name]
+                if 'description' not in current_col_metadata:
+                     current_col_metadata['description'] = ''
+                if 'value_mapping_notes' not in current_col_metadata:
+                    current_col_metadata['value_mapping_notes'] = ''
+                
+                # Exibe nome, tipo, explicação e exemplos
                 type_explanation = get_type_explanation(col_type)
                 markdown_string = f"**`{col_name}`** (`{col_type}`){' - *NOT NULL*' if not col_nullable else ''}"
                 if type_explanation:
@@ -406,13 +460,23 @@ def main():
                         st.caption("Exemplos: (Erro ao buscar)")
                 # Fim do bloco de exemplos
                 
+                # **NOVO: Lógica de Preenchimento Automático Heurístico**
+                description_value = current_col_metadata['description']
+                if not description_value: # Só tenta preencher se estiver vazio
+                    existing_desc = find_existing_description(st.session_state.metadata, col_name)
+                    if existing_desc:
+                        logger.info(f"Preenchendo descrição vazia de '{selected_object}.{col_name}' com descrição encontrada em outro lugar.")
+                        description_value = existing_desc # Usa a descrição encontrada
+                        # Não salva no state ainda, apenas usa como valor inicial do text_area
+
                 # Layout para descrição da coluna e botão IA
                 col_desc_area, col_btn_area = st.columns([4,1])
                 with col_desc_area:
                     col_key = f"desc_col_{selected_object}_{col_name}"
-                    st.session_state.metadata[key_type][selected_object]['COLUMNS'][col_name]['description'] = st.text_area(
+                    # Usa 'description_value' que pode ter sido preenchido acima
+                    current_col_metadata['description'] = st.text_area(
                         label=f"Descrição para `{col_name}`:",
-                        value=st.session_state.metadata[key_type][selected_object]['COLUMNS'][col_name]['description'],
+                        value=description_value, # Valor inicial pode ser o existente ou preenchido
                         key=col_key,
                         label_visibility="collapsed",
                         height=75
@@ -428,42 +492,28 @@ def main():
                         )
                         suggestion = generate_ai_description(prompt_column)
                         if suggestion:
-                            st.session_state.metadata[key_type][selected_object]['COLUMNS'][col_name]['description'] = suggestion
+                            # Salva a sugestão da IA no estado
+                            current_col_metadata['description'] = suggestion
                             st.rerun()
 
                 st.caption("Acima: Descrição geral. Abaixo: Mapeamento de valores.") # Legenda ajustada
                 st.markdown("--- Optional: Value Mappings ---")
                 map_key = f"map_notes_{selected_object}_{col_name}"
-                st.session_state.metadata[key_type][selected_object]['COLUMNS'][col_name]['value_mapping_notes'] = st.text_area(
-                    label=f"Notas sobre mapeamento de valores para `{col_name}` (Ex: 1: Ativo, 2: Inativo):",
-                    value=st.session_state.metadata[key_type][selected_object]['COLUMNS'][col_name]['value_mapping_notes'],
-                    key=map_key,
-                    label_visibility="collapsed",
-                    height=75
-                )
+                current_col_metadata['value_mapping_notes'] = st.text_area(
+                     label=f"Notas sobre mapeamento de valores para `{col_name}` (Ex: 1: Ativo, 2: Inativo):",
+                     value=current_col_metadata['value_mapping_notes'],
+                     key=map_key,
+                     label_visibility="collapsed",
+                     height=75
+                 )
                 st.divider()
         else:
             st.write("Nenhuma coluna definida para este objeto.")
 
-        # --- Exibição de Constraints e Amostra (sem anotação direta aqui) ---
+        # --- Exibição de Constraints --- 
         if object_info.get('constraints') or object_type == "TABLE":
-             st.subheader("Constraints" + (" (Info)" if object_type == "VIEW" else ""))
-             display_constraints(object_info.get('constraints'))
-
-        # --- Amostra de Dados Completa (Permanece igual, mas agora usa dados do state se disponíveis) ---
-        st.divider()
-        st.header("Amostra de Dados Completa (Visualização)")
-        with st.expander(f"Mostrar as primeiras {sample_size_input} linhas de `{selected_object}`?"):
-            # Verifica se já temos a amostra no state
-            if sample_df is not None:
-                if not sample_df.empty:
-                    st.dataframe(sample_df, use_container_width=True)
-                else:
-                    st.info(f"A consulta original para '{selected_object}' retornou 0 linhas.")
-            else:
-                # Se não estava no state (erro anterior), mostra o aviso
-                 st.warning(f"Não foi possível carregar a amostra de dados para '{selected_object}' ao selecionar o objeto.")
-                # Poderia adicionar um botão para tentar recarregar aqui, mas complica
+            st.subheader("Constraints" + (" (Info)" if object_type == "VIEW" else ""))
+            display_constraints(object_info.get('constraints'))
 
 if __name__ == "__main__":
     main() 
