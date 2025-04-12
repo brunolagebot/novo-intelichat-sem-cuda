@@ -14,3 +14,4 @@ trl>=0.8.6 # Para SFTTrainer (fine-tuning)
 accelerate>=0.29 # Para otimizar treinamento em diferentes hardwares
 peft>=0.10 # Para LoRA/QLoRA (Parameter-Efficient Fine-Tuning)
 bitsandbytes>=0.43 # Para quantização (QLoRA) - Requer CUDA Toolkit compatível! 
+tabulate==0.9.0 
