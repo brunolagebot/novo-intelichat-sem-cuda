@@ -2,31 +2,57 @@ import sys
 import subprocess
 import os
 import uuid
-import time # Importa time
+import time
+import platform
+
+# --- Verificação do Ambiente Virtual ---
+def check_venv():
+    """Verifica se estamos em um ambiente virtual e se é o correto."""
+    # Verifica se está em qualquer ambiente virtual
+    in_venv = hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix)
+    if not in_venv:
+        print("ERRO: Este script deve ser executado dentro do ambiente virtual.")
+        print("\nPara configurar o ambiente:")
+        print("1. Execute: python setup_env.py")
+        print("2. Ative o ambiente:")
+        if platform.system() == "Windows":
+            print("   .venv\\Scripts\\activate")
+        else:
+            print("   source .venv/bin/activate")
+        print("3. Execute novamente: python app.py")
+        sys.exit(1)
+    
+    # Verifica se é o ambiente virtual correto (deve estar na pasta .venv)
+    expected_prefix = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.venv')
+    actual_prefix = sys.prefix
+    
+    if platform.system() == "Windows":
+        expected_prefix = expected_prefix.lower()
+        actual_prefix = actual_prefix.lower()
+    
+    if not actual_prefix.startswith(expected_prefix):
+        print("ERRO: Ambiente virtual incorreto.")
+        print(f"Esperado: {expected_prefix}")
+        print(f"Atual: {actual_prefix}")
+        print("\nPor favor, use o ambiente virtual da pasta do projeto.")
+        sys.exit(1)
+
+# Verifica o ambiente virtual antes de qualquer outra operação
+check_venv()
 
 # --- Verificação de Ambiente e Instalação de Dependências --- 
 def check_and_install_dependencies():
     """Verifica se está em um venv e instala dependências do requirements.txt."""
     print("--- Verificando ambiente e dependências ---")
     
-    # 1. Verificar Ambiente Virtual
-    is_venv = hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix)
-    if not is_venv:
-        print("AVISO: Você não parece estar em um ambiente virtual Python (.venv).")
-        print("Recomenda-se executar este script em um ambiente virtual.")
-        # Continuar mesmo assim, mas avisando o usuário.
-    else:
-        print("Ambiente virtual detectado.")
-
-    # 2. Instalar/Atualizar Dependências
+    # Verifica se o arquivo requirements.txt existe
     requirements_path = 'requirements.txt'
     if not os.path.exists(requirements_path):
         print(f"ERRO: Arquivo {requirements_path} não encontrado.")
-        return False # Impede a continuação se não encontrar o arquivo
+        return False
 
     print(f"Garantindo que as dependências em {requirements_path} estão instaladas...")
     try:
-        # Usa sys.executable para garantir que está usando o pip do ambiente correto
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', requirements_path])
         print("Dependências verificadas/instaladas com sucesso.")
         print("---------------------------------------------")
@@ -37,16 +63,17 @@ def check_and_install_dependencies():
         print("---------------------------------------------")
         return False
     except FileNotFoundError:
-        print("ERRO: Comando 'pip' não encontrado. Certifique-se de que Python e pip estão instalados e no PATH.")
+        print("ERRO: Comando 'pip' não encontrado.")
+        print("Certifique-se de que Python e pip estão instalados e no PATH.")
         print("---------------------------------------------")
         return False
 
 # Executa a verificação ANTES de tentar importar pacotes instalados
 if not check_and_install_dependencies():
-    sys.exit(1) # Aborta o script se a instalação falhar
+    sys.exit(1)
 
 # --- Imports e Lógica Principal do App --- 
-# Só importa Gradio e outros DEPOIS de garantir a instalação
+# Só importa os pacotes DEPOIS de garantir a instalação
 import gradio as gr
 from src.ollama_integration.client import chat_completion, get_available_models
 from src.database.history import save_chat_message, update_feedback

@@ -2,6 +2,31 @@
 
 Este documento lista todos os arquivos que não são sincronizados com o GitHub e fornece instruções sobre como obtê-los ou criá-los para executar o projeto corretamente.
 
+## 0. Configuração Inicial do Ambiente
+
+Antes de configurar os arquivos, execute os seguintes passos:
+
+1. Clone o repositório:
+```bash
+git clone https://github.com/brunolagebot/novo-intelichat-sem-cuda.git
+cd novo-intelichat-sem-cuda
+```
+
+2. Configure o ambiente virtual:
+```bash
+python setup_env.py
+```
+
+3. Ative o ambiente virtual:
+- Windows:
+```bash
+.venv\Scripts\activate
+```
+- Linux/Mac:
+```bash
+source .venv/bin/activate
+```
+
 ## 1. Arquivos de Ambiente
 
 ### `.env`
