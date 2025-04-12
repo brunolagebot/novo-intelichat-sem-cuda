@@ -1,0 +1,615 @@
+{
+    "DESCONHECIDOS": {
+        "ABATE_CLASSIF_PECUARISTA": {
+            "description": "",
+            "COLUMNS": {
+                "CLP_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLP_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLP_CODIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLP_PRODUTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLP_TIPO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLP_PRECO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLP_PESO_INICIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLP_PESO_FINAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                }
+            }
+        },
+        "VIEW_DASH_NFS": {
+            "description": "VIEW que tem dados das notas fiscais. Cada representa um produto da nota fiscal. Se a nota possuir mais que um produto, teremos mais de uma linha por nota fiscal. ",
+            "COLUMNS": {
+                "NFS_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "EMP_NOME": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "FILIAL_CODIGO": {
+                    "description": "",
+                    "value_mapping_notes": "Código da filial, 1 é a única que existe, ainda. "
+                },
+                "FILIAL_FANTASIA": {
+                    "description": "",
+                    "value_mapping_notes": "Nome fan"
+                },
+                "NFS_NUMERO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFS_NRO_NF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFS_DATA_CANCELAMENTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_PRODUTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_COD_IMPORTACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFS_CLIENTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFS_SERIE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_UNIDADE_PRODUTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_QTDE_PRODUTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_NAT_OP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CFOP_SIMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_TOTAL_PRODUTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_PRECO_UNITARIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFS_DATA_EMISSAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_PRODUTO_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_PECAS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_RAZAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_FANTASIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CID_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CID_UF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PPR_TOTAL_PESO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_SIT_TRIBUTARIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_CLASS_FISCAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_COD_AUXILIAR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PESO_BRUTO_ITEM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PROPRIETARIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "TIPO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "TIPO_FRETE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_RATEIO_FRETE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "TL_FRETE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFS_FRM_MTORISTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFS_VEICULO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "MOTORISTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEICULO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_RATEIO_DESC_TOTAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "TL_DESCONTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFS_LTCRR_LOTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFS_LTCRR_DATA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_BASE_SUBST_TRIB": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_VALOR_ICMS_SUBST_TRIB": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFS_VALOR_TOTAL_NOTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "EMPFILANOMES": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_TOTAL_PRODUTO_BRUTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_CODIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_NOME": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "TIPO_NF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "DIA_SEMANA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "DATA_SEMANA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_BC_ICMS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_VALOR_ICMS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_BC_PIS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_VALOR_COFINS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_BC_COFINS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFP_VALOR_PIS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "FILIAL_MARCA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GRUPO_CLIENTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GRUPO_CLIENTE_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "GRUPO_PRODUTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "SUBGRUPO_PRODUTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ATIVIDADE_CLIENTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "SEG_CODIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "SEG_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NAT_DESCRICAO_ABR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CFT_CODIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CFT_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PPR_PRECO_LISTA_COD": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PPR_PRECO_LISTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "NFS_PEDIDO_NUMERO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "COORDENADOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "COORDENADOR_NOME": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PPR_PRECO_ACAO_COMERCIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_CPF_CGC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_TIPO_INSCR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PRAZO_MEDIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CUSTO_MEDIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "PESO_MEDIO_PRODUTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "HORA_EMISSAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "REDESPACHO_CODIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "REDESPACHO_NOME": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "ORDEM_CARREGAMENTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                }
+            }
+        }
+    },
+    "TABLES": {
+        "ABATE_CLASSIF_PECUARISTA": {
+            "description": "",
+            "COLUMNS": {
+                "CLP_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLP_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLP_CODIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLP_PRODUTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLP_TIPO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLP_PRECO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLP_PESO_INICIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CLP_PESO_FINAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                }
+            }
+        },
+        "VIEW_VENDEDOR": {
+            "description": "Uma tabela de banco de dados chamada 'VIEW_VENDEDOR' pode ser uma coleção de dados que contém informações sobre vendores e sua empresa, filiais, numero de código, nome, área de trabalho, estado geográfico, cidade e cidade de registro. Ele pode ser utilizado para fazer buscas por informações específicas sobre vendores e suas empresas, gerenciamento de dados, análise de mercados, etc.",
+            "COLUMNS": {
+                "VEND_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_CODIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_NOME": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_AREA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_ENDERECO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_BAIRRO": {
+                    "description": "Bairro, setor, loteamento. ",
+                    "value_mapping_notes": ""
+                },
+                "VEND_CIDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_CEP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_FONE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_OBS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_COMISSAO_FATURAMENTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_COMISSAO_PRODUTOS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_FORNECEDOR_SERVICO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_ATIVO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_CALCULA_COMISSAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_INTERNO_EXTERNO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "VEND_TIPO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "AREA_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CF_RAZAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CID_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "CID_UF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                }
+            }
+        },
+        "VIEW_DASH_VENDAS": {
+            "description": "",
+            "COLUMNS": {
+                "NFS_DATA_EMISSAO": {
+                    "description": "One possible description in Portuguese Brazilian for the column \"NFS_DATA_EMISSAO\" of type \"TIMESTAMP\" in the table \"VIEW_DASH_VENDAS\" is \"Data da Emissão.\" This could refer to the date and time when a sale was initiated or created in the database.",
+                    "value_mapping_notes": ""
+                },
+                "NFS_NRO_NF": {
+                    "description": "One possible description in Portuguese Brazil for the column 'NFS_NRO_NF' of type INTEGER that belongs to the object 'VIEW_DASH_VENDAS' (Table) is: \"A coluna que armazena valores numericos definidos pelo sistema e que pertence ao objeto 'VIEW_DASH_VENDAS' (Table).\" \n\nThis translates to \"a column that stores numeric values defined by the system and belongs to the object 'VIEW_DASH_VENDAS' (Table)\".",
+                    "value_mapping_notes": ""
+                },
+                "NFS_CLIENTE": {
+                    "description": "A coluna NFS_CLIENTE no banco de dados integrador pode ser uma referência para um cliente, especialmente em contexto financeiro eletrônico. Ele pode estar armazenado como um valor numérico integral, podendo variar de valores de 1 a 64, mas geralmente tem uma unidade de medida de 10. A referência dele pode ser importante para o funcionamento da tela de negócios em que ele está localizado.",
+                    "value_mapping_notes": ""
+                },
+                "NFS_RAZAO": {
+                    "description": "One possible Portuguese language description of the NFS_RAZAO column in the MySQL database is: \"Nome da Empresa\". This translates to \"Company Name\" in English.",
+                    "value_mapping_notes": ""
+                },
+                "NFS_VENDEDOR": {
+                    "description": "One possible Portuguese-language description of the database column named \"NFS_VENDEDOR\" of type \"INTEGER\" that belongs to the object \"VIEW_DASH_VENDAS\" is \"A integer value that represents the total number of products sold by a vendor in the NFS Marketplace\".",
+                    "value_mapping_notes": ""
+                },
+                "VEND_NOME": {
+                    "description": "Certainly! Here is a concise Portuguese description for the column in the database called 'VEND_NOME' of type 'VARCHAR(50)' that belongs to the 'VIEW_DASH_VENDAS' table. It would likely mean something like \"a field for storing names, typically 50 characters long, associated with purchases made through the 'VIEW_DASH_VENDAS' table.",
+                    "value_mapping_notes": ""
+                },
+                "NFP_PRODUTO": {
+                    "description": "A coluna de banco de dados chamada 'NFP_PRODUTO' do tipo 'INTEGER' que pertence ao objeto 'VIEW_DASH_VENDAS' (TABLE) significa que é uma coluna de dados numéricos armazenado em um banco de dados para além da tela. Ela pode ser usada para armazenar informações sobre produtos vendidos em um vendedor.",
+                    "value_mapping_notes": ""
+                },
+                "NFP_PRODUTO_DESCRICAO": {
+                    "description": "A coluna de banco de dados chamada 'NFP_PRODUTO_DESCRICAO' do tipo 'VARCHAR(231)' tem a propósito de armazenar um desenhado, uma descrição ou um valor alvo. A informação armazenada pode ser utilizada para identificar o produto e o seu valor. Em geral, esta coluna pode ser usada em uma tabela de vendas para agrupar os produtos envolvidos em várias vendas diferentes.",
+                    "value_mapping_notes": ""
+                },
+                "NFP_UNIDADE_PRODUTO": {
+                    "description": "One possible description in Portuguese Brazilian for the column in the database table called 'NFP_UNIDADE_PRODUTO' of type 'VARCHAR(2)' that belongs to the object 'VIEW_DASH_VENDAS' (Table) is: \n\n'Série de Identificadores das Unidades Produtoras'. This translates to 'Series of Identifiers for Producer Units'.",
+                    "value_mapping_notes": ""
+                },
+                "NFP_PRECO_UNITARIO": {
+                    "description": "Sure, here's a concise Portuguese description for the column in the database called 'NFP_PRECO_UNITARIO' of type 'DOUBLE PRECISION' that belongs to the object 'VIEW_DASH_VENDAS': \n\n\"A coluna de dados chamada 'NFP_PRECO_UNITARIO' que tem o tipo de dado dobradinha, ao longo da tabela de visualização 'VIEW_DASH_VENDAS'. A coluna representa uma variável dobramental de preço real.\" \n\nThis translates to: \"A column called 'NFP_PRECO_UNITARIO' with a type of double precision, belonging to the view 'VIEW_DASH_VENDAS', represents a real-valued variable.",
+                    "value_mapping_notes": ""
+                },
+                "NFP_RATEIO_DESC_TOTAL": {
+                    "description": "A coluna de banco de dados chamada 'NFP_RATEIO_DESC_TOTAL' do tipo 'DOUBLE PRECISION' que pertence ao objeto 'VIEW_DASH_VENDAS' (TABLE) está sendo um conjunto de valores decimais que representam o valor total da atividade de venda no período específico no quão muito cada vendedor é bem-vindo.",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_GRUPO": {
+                    "description": "Certainly! Here's a concise Portuguese description for the \"PRODUTO_GRUPO\" column in the \"VIEW_DASH_VENDAS\" table that belongs to the \"INTEGER\" type: \n\n\"Produto Grupo\" é um campo de dados numérico da tabela \"VIEW_DASH_VENDAS\". Ele está armazenado como um valor integral no formato N, onde N é o número de produtos envolvidos na vendas desejadas. Assim, ele está relacionado às vendas e ainda mais, ele pode ser usado para gerenciar as vendas em um grande número de produtos em um único local de negócio.\n\nÉ importante notar que este campo de dados armazenado não se refere a um grupo de produtos específicos, como empresas ou marcas, mas sim a um conjunto numérico de produtos valorizados por um determinado período de tempo e no contexto específico da tabela.",
+                    "value_mapping_notes": ""
+                },
+                "GRUPO_DESCRICAO": {
+                    "description": "One possible description in Portuguese Brazil for the column in the database table called 'GRUPO_DESCRICAO' of type 'VARCHAR(50)' that belongs to the object 'VIEW_DASH_VENDAS' (Table) is:\n\n- 'GRUPO_DESCRICAO' - a descriptive field that holds a string with 50 characters.\n\nThis description is just an example and may vary depending on the specific requirements of the system or application using the database.",
+                    "value_mapping_notes": ""
+                },
+                "PRODUTO_SUBGRUPO": {
+                    "description": "A coluna de banco de dados chamada 'PRODUTO_SUBGRUPO' do tipo 'INTEGER' que pertence ao objeto 'VIEW_DASH_VENDAS' (TABLE) é uma coluna que possui o valor de um número integer. Ela pode ser usada para identificar quais produtos sub-grupos de vendas estão sendo analisados em um determinado momento da história do banco de dados.",
+                    "value_mapping_notes": ""
+                },
+                "SUBGRUPO_DESCRICAO": {
+                    "description": "One possible description in Portuguese Brazil for the column in the database called 'SUBGRUPO_DESCRICAO' of type 'VARCHAR(50)' that belongs to the object 'VIEW_DASH_VENDAS' (Table) is: \n\n'Sobre o significado específico de dados armazenados.",
+                    "value_mapping_notes": ""
+                },
+                "NFP_PECAS": {
+                    "description": "One possible description in Portuguese for the column in the database called 'NFP_PECAS' of type 'DOUBLE PRECISION' that belongs to the object 'VIEW_DASH_VENDAS' (Table) is:\n\n- Não se pode ter um valor maior que o valor definido pelo tipo de dado. (The value cannot be greater than the defined value).\n- O valor do tipo de dado é fixo e não poderá ser modificado pelo usuário quando a função estiver carregando dados. (The value is fixed and cannot be changed by the user when the function is loading data.). \n\nThese descriptions suggest that 'NFP_PECAS' is a column in the 'VIEW_DASH_VENDAS' table that stores a double-precision value, which is a data type that allows for high precision and low-degree computations. The first description implies that the value should not exceed a certain range or limit, while the second description highlights that it is a fixed value that cannot be changed by the user when the function is loading data.",
+                    "value_mapping_notes": ""
+                },
+                "NFP_QTDE_PRODUTO": {
+                    "description": "The NFP_QTDE_PRODUTO column in the view Dash Vendas is a double-precision data type that belongs to the object View_Dash_Vendas. It possibly stores numerical values representing sales quantity and may also include other relevant information such as product name, price, and date of sale.",
+                    "value_mapping_notes": ""
+                },
+                "NFP_TOTAL_PRODUTO": {
+                    "description": "One possible description in Portuguese Brazil for the column \"NFP_TOTAL_PRODUTO\" in the \"VIEW_DASH_VENDAS\" table is \"Soma de produtos vendidos pelo total de venda.\" This means \"The sum of products sold by the total number of sales.\" It refers to the total amount of goods sold and indicates how many times each item has been purchased.",
+                    "value_mapping_notes": ""
+                },
+                "DEDUCAO": {
+                    "description": "A coluna de banco de dados chamada 'DEDUCAO' do tipo 'DOUBLE PRECISION' que pertence ao objeto 'VIEW_DASH_VENDAS' (TABLE) é uma coluna computacional que pode ser utilizada para armazenar valores reais positivos com alcance fixo, onde o valor pode ser alterado de acordo com os parâmetros específicos da função.\n\nApenas sei que a palavra-chave 'DEDUCAO' significa a mesma coisa em português brasileiro. Porém, será ainda mais informativo se eu tivesse conhecimento sobre o efeito da coluna na tabela e suas necessidades específicas de uso.",
+                    "value_mapping_notes": ""
+                },
+                "MEDIA": {
+                    "description": "A coluna de banco de dados chamada 'MEDIA' do tipo 'DOUBLE PRECISION' que pertence ao objeto 'VIEW_DASH_VENDAS' (TABLE) pode ser descrita como uma coluna de dados numéricos armazenado em um banco de dados que apresenta informações sobre o valor da informação de dados armazenados no banco de dados.",
+                    "value_mapping_notes": ""
+                },
+                "VALOR_COMISSAO": {
+                    "description": "A coluna de banco de dados chamada 'VALOR_COMISSAO' do tipo 'DOUBLE PRECISION' que pertence ao objeto 'VIEW_DASH_VENDAS' é uma coluna que armazena um valor fixo definido. É um campo de estado do tipo 'TEXT'. A sua função é para alocar valores em relação ao custo da venda e usa-se para calcular o valor da venda.",
+                    "value_mapping_notes": ""
+                },
+                "NFS_DH_RECBTO_NFE": {
+                    "description": "A coluna de banco de dados chamada 'NFS_DH_RECBTO_NFE' do tipo 'TIMESTAMP' que pertence ao objeto 'VIEW_DASH_VENDAS' (TABLE) é uma coluna que armazena o horário em que um vendedor lançou sua venda. Isso significa que seu cliente começou a negociar logo após o início do tempo, no lugar de tempo em que o vendedor lançou suas vendas. Assim, poderá consultar esta coluna para ver o horário em que um vendedor lançou suas vendas.",
+                    "value_mapping_notes": ""
+                },
+                "CIDADE": {
+                    "description": "One possible description in Portuguese for the column in the database called \"CIDADE\" of type \"VARCHAR(50)\", which belongs to the object \"VIEW_DASH_VENDAS\", is:\n\n- CIDADE: Informação de área geográfica para localizar o banco de dados.\n\nThis description suggests that the \"CIDADE\" column contains information about the geographical area where the database is located, which can be used to identify it.",
+                    "value_mapping_notes": ""
+                },
+                "UF": {
+                    "description": "A coluna chamada 'UF' do tipo 'VARCHAR(2)' que pertence ao objeto 'VIEW_DASH_VENDAS' (TABLE) é uma coluna de banco de dados que armazena um valor específico. Não há informações estritamente poligínicas, portanto, não pode ter serem esclarecimentos bem específicos sobre como este valor específico foi calculado.",
+                    "value_mapping_notes": ""
+                }
+            }
+        }
+    }
+}
