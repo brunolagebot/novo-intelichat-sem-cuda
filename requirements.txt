@@ -1,0 +1,16 @@
+# Arquivo de dependências Python 
+requests 
+python-dotenv 
+gradio 
+
+# Testes
+pytest 
+pytest-mock # Para simular dependências (como requests) 
+
+# Fine-tuning & Transformers
+transformers[torch]>=4.40 # Inclui pytorch
+datasets>=2.18 # Para carregar e processar dados
+trl>=0.8.6 # Para SFTTrainer (fine-tuning)
+accelerate>=0.29 # Para otimizar treinamento em diferentes hardwares
+peft>=0.10 # Para LoRA/QLoRA (Parameter-Efficient Fine-Tuning)
+bitsandbytes>=0.43 # Para quantização (QLoRA) - Requer CUDA Toolkit compatível! 
