@@ -381,7 +381,7 @@
     },
     "TABLES": {
         "ABATE_CLASSIF_PECUARISTA": {
-            "description": "",
+            "description": "Não sei ainda",
             "COLUMNS": {
                 "CLP_EMPRESA": {
                     "description": "",
