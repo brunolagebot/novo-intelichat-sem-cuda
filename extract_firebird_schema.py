@@ -70,17 +70,19 @@ def get_constraint_details(cur, relation_id):
         SELECT
             rc.RDB$CONSTRAINT_NAME AS CONSTRAINT_NAME,
             rc.RDB$CONSTRAINT_TYPE AS CONSTRAINT_TYPE,
-            rc.RDB$INDEX_NAME AS INDEX_NAME,
+            rc.RDB$INDEX_NAME AS LOCAL_INDEX_NAME, -- Renomeado para clareza
+            fk.RDB$CONST_NAME_UQ AS REF_CONSTRAINT_NAME, -- Nome da constraint PK/UQ referenciada
             fk.RDB$UPDATE_RULE AS FK_UPDATE_RULE,
             fk.RDB$DELETE_RULE AS FK_DELETE_RULE,
-            pk.RDB$RELATION_NAME AS FK_TARGET_TABLE
+            pk.RDB$RELATION_NAME AS FK_TARGET_TABLE,
+            pk.RDB$INDEX_NAME AS REF_INDEX_NAME -- Nome do índice da PK/UQ referenciada
         FROM RDB$RELATION_CONSTRAINTS rc
         LEFT JOIN RDB$REF_CONSTRAINTS fk ON rc.RDB$CONSTRAINT_NAME = fk.RDB$CONSTRAINT_NAME
         LEFT JOIN RDB$RELATION_CONSTRAINTS pk ON fk.RDB$CONST_NAME_UQ = pk.RDB$CONSTRAINT_NAME
         WHERE rc.RDB$RELATION_NAME = ?
         ORDER BY rc.RDB$CONSTRAINT_NAME;
     """
-    sql_constraint_columns = """
+    sql_index_columns = """ -- Consulta genérica para colunas de um índice
         SELECT ix.RDB$FIELD_NAME AS FIELD_NAME
         FROM RDB$INDEX_SEGMENTS ix
         WHERE ix.RDB$INDEX_NAME = ?
@@ -92,36 +94,48 @@ def get_constraint_details(cur, relation_id):
     for row in cur.fetchallmap():
         constraint_name = row['CONSTRAINT_NAME'].strip()
         constraint_type = row['CONSTRAINT_TYPE'].strip()
-        index_name = row['INDEX_NAME'].strip() if row['INDEX_NAME'] else None
+        local_index_name = row['LOCAL_INDEX_NAME'].strip() if row['LOCAL_INDEX_NAME'] else None
+        ref_constraint_name = row['REF_CONSTRAINT_NAME'].strip() if row['REF_CONSTRAINT_NAME'] else None
+        ref_index_name = row['REF_INDEX_NAME'].strip() if row['REF_INDEX_NAME'] else None
 
-        # Busca colunas associadas ao índice da constraint
-        columns = []
-        if index_name:
-            cur.execute(sql_constraint_columns, (index_name,))
-            columns = [seg['FIELD_NAME'].strip() for seg in cur.fetchallmap()]
+        # Busca colunas locais associadas ao índice local da constraint
+        local_columns = []
+        if local_index_name:
+            cur.execute(sql_index_columns, (local_index_name,))
+            local_columns = [seg['FIELD_NAME'].strip() for seg in cur.fetchallmap()]
+        
+        # Busca colunas referenciadas (PK/UQ) associadas ao índice referenciado
+        referenced_columns = []
+        if constraint_type == 'FOREIGN KEY' and ref_index_name:
+            try:
+                cur.execute(sql_index_columns, (ref_index_name,))
+                referenced_columns = [seg['FIELD_NAME'].strip() for seg in cur.fetchallmap()]
+                logger.debug(f"  -> Colunas Referenciadas para FK {constraint_name} ({ref_index_name}): {referenced_columns}")
+            except Exception as e:
+                logger.warning(f"Erro ao buscar colunas referenciadas para o índice {ref_index_name} da FK {constraint_name}: {e}")
 
         constraint_data = {
             "name": constraint_name,
-            "columns": columns
+            "columns": local_columns
         }
 
         if constraint_type == 'PRIMARY KEY':
             constraints['primary_key'].append(constraint_data)
         elif constraint_type == 'FOREIGN KEY':
             constraint_data['references_table'] = row['FK_TARGET_TABLE'].strip() if row['FK_TARGET_TABLE'] else None
+            # ADICIONADO: Preenche as colunas referenciadas
+            constraint_data['references_columns'] = referenced_columns 
             constraint_data['update_rule'] = row['FK_UPDATE_RULE'].strip() if row['FK_UPDATE_RULE'] else 'RESTRICT'
             constraint_data['delete_rule'] = row['FK_DELETE_RULE'].strip() if row['FK_DELETE_RULE'] else 'RESTRICT'
             constraints['foreign_keys'].append(constraint_data)
         elif constraint_type == 'UNIQUE':
             constraints['unique'].append(constraint_data)
         elif constraint_type == 'NOT NULL':
-             # NOT NULL geralmente é parte da definição da coluna, mas pode aparecer aqui
              constraints['not_null'].append(constraint_data)
         elif constraint_type == 'CHECK':
-            # Obter a expressão CHECK é mais complexo, omitido por simplicidade
             constraints['check'].append({"name": constraint_name, "expression": "<CHECK EXPRESSION NOT EXTRACTED>"})
         else:
-            constraint_data['type'] = constraint_type # Tipo desconhecido
+            constraint_data['type'] = constraint_type
             constraints['other'].append(constraint_data)
 
     # Converte defaultdict para dict normal para o JSON

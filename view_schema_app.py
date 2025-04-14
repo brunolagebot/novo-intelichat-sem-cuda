@@ -60,7 +60,7 @@ OVERVIEW_COUNTS_FILE = "overview_counts.json" # NOVO: Arquivo para contagens
 
 # --- Funções Auxiliares --- 
 
-@st.cache_data # Cache para estrutura técnica (não muda na sessão)
+# REMOVIDO/COMENTADO: @st.cache_data # Cache para estrutura técnica (não muda na sessão)
 def load_schema(file_path):
     """Carrega o esquema técnico do banco de dados do arquivo JSON."""
     try:
@@ -208,23 +208,96 @@ def generate_ai_description(prompt):
         st.error(f"Erro ao contatar a IA: {e}")
         return None
 
-def find_existing_description(metadata, target_col_name):
-    """Procura por uma descrição existente para um nome de coluna em todo o metadado."""
-    if not metadata or not target_col_name:
-        return None
-    # Procura em Tabelas
-    for table_name, table_meta in metadata.get('TABLES', {}).items():
-        col_meta = table_meta.get('COLUMNS', {}).get(target_col_name)
-        if col_meta and col_meta.get('description'):
-            logger.debug(f"Encontrada descrição existente para '{target_col_name}' na tabela '{table_name}'")
-            return col_meta['description']
-    # Procura em Views
-    for view_name, view_meta in metadata.get('VIEWS', {}).items():
-        col_meta = view_meta.get('COLUMNS', {}).get(target_col_name)
-        if col_meta and col_meta.get('description'):
-            logger.debug(f"Encontrada descrição existente para '{target_col_name}' na view '{view_name}'")
-            return col_meta['description']
-    return None # Não encontrado
+# --- Função find_existing_description (MODIFICADA para usar FKs) ---
+def find_existing_description(metadata, schema_data, current_object_name, target_col_name):
+    """
+    Procura por uma descrição existente para uma coluna:
+    1. Busca por nome exato em outras tabelas/views.
+    2. Se for FK, busca a descrição da PK referenciada.
+    3. Se for PK, busca a descrição de uma coluna FK que a referencie.
+    """
+    if not metadata or not schema_data or not target_col_name or not current_object_name:
+        return None, None # Retorna None para descrição e para a fonte
+
+    # 1. Busca por nome exato (prioridade)
+    for obj_type_key in ['TABLES', 'VIEWS', 'DESCONHECIDOS']:
+        for obj_name, obj_meta in metadata.get(obj_type_key, {}).items():
+            # Pula o próprio objeto atual
+            if obj_name == current_object_name:
+                continue
+            col_meta = obj_meta.get('COLUMNS', {}).get(target_col_name)
+            if col_meta and col_meta.get('description', '').strip():
+                desc = col_meta['description']
+                source = f"nome exato em '{obj_name}'"
+                logger.debug(f"Heurística: Descrição encontrada por {source}")
+                return desc, source
+
+    # Se não achou por nome exato, tenta via FKs (precisa do schema_data)
+    current_object_info = schema_data.get(current_object_name)
+    if not current_object_info:
+        return None, None
+    
+    current_constraints = current_object_info.get('constraints', {})
+    current_pk_cols = [col for pk in current_constraints.get('primary_key', []) for col in pk.get('columns', [])]
+
+    # 2. Busca Direta (Se target_col é FK)
+    for fk in current_constraints.get('foreign_keys', []):
+        fk_columns = fk.get('columns', [])
+        ref_table = fk.get('references_table')
+        ref_columns = fk.get('references_columns', [])
+        if target_col_name in fk_columns and ref_table and ref_columns:
+            # Assume FK simples (1 coluna local -> 1 coluna ref)
+            try:
+                idx = fk_columns.index(target_col_name)
+                ref_col_name = ref_columns[idx]
+                # Busca descrição da PK referenciada
+                # Precisa determinar o tipo do objeto referenciado (TABLE/VIEW)
+                ref_obj_type = schema_data.get(ref_table, {}).get('object_type', 'TABLE') # Assume TABLE se não achar
+                ref_obj_type_key = ref_obj_type + "S"
+                
+                ref_col_meta = metadata.get(ref_obj_type_key, {}).get(ref_table, {}).get('COLUMNS', {}).get(ref_col_name)
+                if ref_col_meta and ref_col_meta.get('description', '').strip():
+                    desc = ref_col_meta['description']
+                    source = f"chave estrangeira para '{ref_table}.{ref_col_name}'"
+                    logger.debug(f"Heurística: Descrição encontrada por {source}")
+                    return desc, source
+            except (IndexError, ValueError):
+                logger.warning(f"Inconsistência na FK {fk.get('name')} para coluna {target_col_name}")
+                continue # Tenta próxima FK se houver erro
+
+    # 3. Busca Inversa (Se target_col é PK)
+    if target_col_name in current_pk_cols:
+        # Varre todos os objetos no schema técnico buscando FKs que apontem para cá
+        for other_obj_name, other_obj_info in schema_data.items():
+            if other_obj_name == current_object_name: continue # Pula a própria tabela
+            
+            other_constraints = other_obj_info.get('constraints', {})
+            for other_fk in other_constraints.get('foreign_keys', []):
+                 if other_fk.get('references_table') == current_object_name and \
+                    target_col_name in other_fk.get('references_columns', []):
+                     # Achou uma FK em outra tabela apontando para nossa PK
+                     referencing_columns = other_fk.get('columns', [])
+                     ref_pk_columns = other_fk.get('references_columns', [])
+                     try:
+                         # Acha a coluna local (FK) correspondente à nossa PK
+                         idx_pk = ref_pk_columns.index(target_col_name)
+                         referencing_col_name = referencing_columns[idx_pk]
+                         
+                         # Busca a descrição desta coluna FK na outra tabela
+                         other_obj_type = other_obj_info.get('object_type', 'TABLE')
+                         other_obj_type_key = other_obj_type + "S"
+                         other_col_meta = metadata.get(other_obj_type_key, {}).get(other_obj_name, {}).get('COLUMNS', {}).get(referencing_col_name)
+                         
+                         if other_col_meta and other_col_meta.get('description', '').strip():
+                             desc = other_col_meta['description']
+                             source = f"coluna '{referencing_col_name}' em '{other_obj_name}' (que referencia esta PK)"
+                             logger.debug(f"Heurística: Descrição encontrada por {source}")
+                             return desc, source
+                     except (IndexError, ValueError):
+                          logger.warning(f"Inconsistência na FK {other_fk.get('name')} em {other_obj_name} ao buscar descrição inversa.")
+                          continue # Tenta próxima FK
+
+    return None, None # Nenhuma descrição encontrada
 
 # --- Função para Contar Linhas (MODIFICADA) ---
 def fetch_row_count(db_path, user, password, charset, table_name):
@@ -403,6 +476,55 @@ def save_overview_counts(counts_data, file_path):
     except Exception as e:
         logging.error(f"Erro ao salvar contagens da visão geral: {e}")
         return False
+
+# --- NOVA FUNÇÃO: Calcular Contagem de Referências FK ---
+# REMOVIDO/COMENTADO: @st.cache_data # Cache porque depende apenas do schema técnico
+def calculate_fk_reference_counts(schema_data):
+    """Calcula quantas vezes cada coluna é referenciada por uma FK."""
+    reference_counts = defaultdict(int)
+    if not schema_data:
+        return []
+
+    logger.info("[FK Count] Iniciando cálculo de referências...")
+    # Itera sobre todos os objetos para encontrar FKs
+    for obj_name, obj_info in schema_data.items():
+        # LOG: Nome do objeto sendo processado
+        logger.debug(f"[FK Count] Processando objeto: {obj_name}")
+        constraints = obj_info.get('constraints', {})
+        foreign_keys = constraints.get('foreign_keys', [])
+        # LOG: Lista de FKs encontrada para este objeto
+        logger.debug(f"[FK Count]   Lista foreign_keys encontrada para {obj_name}: {foreign_keys}")
+
+        # Itera sobre cada FK definida neste objeto
+        if not foreign_keys:
+             logger.debug(f"[FK Count]   Nenhuma FK encontrada para {obj_name}, pulando.")
+             continue # Pula para o próximo objeto se não houver FKs
+
+        for i, fk in enumerate(foreign_keys):
+            # LOG: Detalhes da FK sendo processada
+            logger.debug(f"[FK Count]     Processando FK #{i+1} em {obj_name}: {fk}")
+            ref_table = fk.get('references_table')
+            ref_columns = fk.get('references_columns', [])
+            # LOG: Tabela e colunas referenciadas extraídas da FK
+            logger.debug(f"[FK Count]       -> references_table: {ref_table}, references_columns: {ref_columns}")
+
+            # Incrementa a contagem para cada coluna referenciada
+            if ref_table and ref_columns:
+                for ref_col in ref_columns:
+                    # Usa tupla (tabela, coluna) como chave
+                    reference_counts[(ref_table, ref_col)] += 1
+                    logger.debug(f"[FK Count]         -> Incrementando contagem para '{ref_table}.{ref_col}'")
+            else:
+                logger.debug(f"[FK Count]         -> FK ignorada (sem ref_table ou ref_columns).")
+    
+    # Converte para lista de tuplas e ordena pela contagem (descendente)
+    sorted_references = sorted(
+        [(table, col, count) for (table, col), count in reference_counts.items()],
+        key=lambda item: item[2], # Ordena pelo terceiro elemento (contagem)
+        reverse=True
+    )
+    logger.info(f"[FK Count] Cálculo de referências concluído. {len(sorted_references)} colunas referenciadas encontradas.")
+    return sorted_references
 
 # --- Função Principal da Aplicação --- 
 def main():
@@ -615,6 +737,32 @@ def main():
                  *   **Colunas com Notas:** Número de colunas com `value_mapping_notes` preenchido nos metadados.
                  *   **% Descritas / % Com Notas:** Percentuais correspondentes.
                  """)
+
+                 # --- NOVA SEÇÃO: Ranking de Colunas Mais Referenciadas ---
+                 st.divider()
+                 st.subheader("Colunas Mais Referenciadas (via Chaves Estrangeiras)")
+                 st.caption("Ajuda a priorizar a documentação das colunas mais centrais do sistema.")
+                 
+                 try:
+                     # LOG DE DIAGNÓSTICO ADICIONAL:
+                     # Substitua 'SUA_TABELA_COM_FK' pelo nome de uma tabela que DEVE ter FKs no JSON
+                     tabela_teste = 'TABELA_LOCAL_COBRANCA' # <-- COLOQUE O NOME DA SUA TABELA AQUI
+                     if schema_data and tabela_teste in schema_data:
+                         fks_teste = schema_data.get(tabela_teste, {}).get('constraints', {}).get('foreign_keys', 'CHAVE_NAO_ENCONTRADA')
+                         logger.debug(f"[DIAGNÓSTICO main] Acesso direto a FKs para '{tabela_teste}': {fks_teste}")
+                     else:
+                         logger.debug(f"[DIAGNÓSTICO main] Tabela de teste '{tabela_teste}' não encontrada no schema_data.")
+                     
+                     # Chamada original da função
+                     fk_counts = calculate_fk_reference_counts(schema_data)
+                     if fk_counts:
+                         df_fk_counts = pd.DataFrame(fk_counts, columns=['Tabela Referenciada', 'Coluna Referenciada', 'Nº de Referências'])
+                         st.dataframe(df_fk_counts, use_container_width=True)
+                     else:
+                         st.info("Nenhuma referência de chave estrangeira encontrada no esquema técnico para análise.")
+                 except Exception as e:
+                     logger.error(f"Erro ao calcular ou exibir contagem de referências FK: {e}", exc_info=True)
+                     st.error("Ocorreu um erro ao analisar as referências de chaves estrangeiras.")
              except Exception as e:
                  st.error(f"Erro ao gerar a visão geral da documentação: {e}")
                  logger.exception("Erro na seção Visão Geral:")
@@ -772,7 +920,17 @@ def main():
                             else: st.caption("Exemplos: (Amostra sem valores não nulos)")
                         except Exception as e: logger.warning(f"Erro ao processar exemplos: {e}"); st.caption("Exemplos: (Erro)")
                     description_value = current_col_metadata['description']
-                    if not description_value: existing_desc = find_existing_description(st.session_state.metadata, col_name); description_value = existing_desc or description_value
+                    if not description_value:
+                        # ATUALIZADO: Passa mais argumentos para a função
+                        existing_desc, source = find_existing_description(
+                            st.session_state.metadata, 
+                            schema_data,             # Passa o schema técnico
+                            selected_object,         # Passa o nome do objeto atual
+                            col_name
+                        )
+                        if existing_desc:
+                            description_value = existing_desc
+                            logger.info(f"Preenchendo '{selected_object}.{col_name}' com sugestão via {source}")
                     col_desc_area, col_btn_area = st.columns([4,1])
                     with col_desc_area:
                         col_key = f"desc_col_{selected_object}_{col_name}"
@@ -786,6 +944,46 @@ def main():
                     map_key = f"map_notes_{selected_object}_{col_name}"
                     current_col_metadata['value_mapping_notes'] = st.text_area(label=f"Notas mapeamento `{col_name}`:", value=current_col_metadata['value_mapping_notes'], key=map_key, label_visibility="collapsed", height=75)
                     st.divider()
+
+                    # Descrição da Coluna (com busca heurística APRIMORADA)
+                    col_desc_key = f"{col_key}_desc"
+                    current_col_desc = current_col_metadata.get('description', '')
+                    description_value_to_display = current_col_desc
+                    heuristic_source = None # Fonte da heurística
+                    
+                    if not current_col_desc:
+                        # ATUALIZADO: Passa mais argumentos para a função
+                        existing_desc, source = find_existing_description(
+                            st.session_state.metadata, 
+                            schema_data,             # Passa o schema técnico
+                            selected_object,         # Passa o nome do objeto atual
+                            col_name
+                        )
+                        if existing_desc:
+                            description_value_to_display = existing_desc
+                            heuristic_source = source # Armazena a fonte
+                            logger.info(f"Preenchendo '{selected_object}.{col_name}' com sugestão via {source}")
+                        
+                        # Exibe a legenda SE a heurística foi aplicada
+                        if heuristic_source:
+                            # ATUALIZADO: Mostra a fonte da sugestão
+                            st.caption(f"ℹ️ Sugestão preenchida ({heuristic_source}).")
+
+                        # Layout para descrição e botão IA 
+                        col_desc_area, col_btn_area = st.columns([4,1])
+                        with col_desc_area:
+                             new_col_desc_input = st.text_area(
+                                 label=f"Descrição para `{col_name}`:",
+                                 value=description_value_to_display, 
+                                 key=col_desc_key,
+                                 label_visibility="collapsed",
+                                 height=75
+                             )
+                             if new_col_desc_input != current_col_metadata.get('description', ''):
+                                  current_col_metadata['description'] = new_col_desc_input
+                                  st.toast(f"Descrição '{col_name}' atualizada (não salva)", icon="✏️")
+                        # ... (botão IA)
+                        # ... (notas de mapeamento)
             else: st.write("Nenhuma coluna definida.")
 
             # --- Exibição de Constraints (Lógica existente) ---

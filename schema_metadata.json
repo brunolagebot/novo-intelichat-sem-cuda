@@ -1348,6 +1348,792 @@
                     "value_mapping_notes": ""
                 }
             }
+        },
+        "ABATE_COMPRADOR": {
+            "description": "",
+            "COLUMNS": {
+                "COMP_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "COMP_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "COMP_CODIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "COMP_NOME": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "COMP_PERCENT": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                }
+            }
+        },
+        "TABELA_LOCAL_COBRANCA": {
+            "description": "Tabela do banco de dados que contém os dados dos locais de cobrança. Local de cobrança é o cadastro da conta ou modalidade de pagamento vinculada à uma nota fiscal ou título emitido pela empresa.",
+            "COLUMNS": {
+                "LC_EMPRESA": {
+                    "description": "Código que representa a empresa responsável pelos dados da linha em contexto.",
+                    "value_mapping_notes": "1 é a nossa empresa, Frigorífico Fazcarne"
+                },
+                "LC_FILIAL": {
+                    "description": "Código que representa a filial da empresa responsável pelos dados da linha em contexto.",
+                    "value_mapping_notes": ""
+                },
+                "LC_CODIGO": {
+                    "description": "Código que representa o local de cobrança",
+                    "value_mapping_notes": ""
+                },
+                "LC_DESCRICAO": {
+                    "description": "Descriçáo por extenso do local de cobrança",
+                    "value_mapping_notes": ""
+                },
+                "LC_CIDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_ABREVIACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_BANCO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_AGENCIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CONTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CONVENIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CARTEIRA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_DIRETORIO_REMESSA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_ARQUIVO_REMESSA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_DIRETORIO_RETORNO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_ARQUIVO_RETORNO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_REMESSA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_DIAS_CREDITO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_TIPO_COB_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_TIPO_COB_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_TIPO_COBRANCA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_LISTAR_POSICOES": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CARTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_BAIXA_PROVISORIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CONTABIL_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CONTABIL_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CONTABIL_EXERCICIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CONTA_CONTABIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CONTA_CONTABIL_REDUZIDO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_BOLETO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CEDENTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_TARIFA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_TEC_EMPRESA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_TEC_FILIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_END_FATURAMENTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_END_COBRANCA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_END_CORRESPONDENCIA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_COD_COMUNIC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CARTEIRA_TIPO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CNAB": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_POSICOES_CONVENIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_REGISTRADA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_ATIVO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_TAXA_JUROS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_EMITE_BOLETO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CNAB_RETORNO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_OCULTAR_PESQ": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_COD_IMPORTACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_DESPESA_BANCO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_VARIACAO_CART": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CONCILIA_EXTR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CARTAO_CREDITO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CTA_BANCO_DEB": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CTA_BANCO_DEB_RED": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FILIAL_UZY": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_NAO_FLUXO_CAIXA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_NOME_CEDENTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_SACADOR_AVALISTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_TIPO_CONTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_AGENCIA_CEDENTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CONTA_VINCULADA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CONFIG_NUMERACAO_BLOQ": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_MULTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_COD_INSTRUCAO_1": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_COD_INSTRUCAO_2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_DIAS_PROTESTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_NAO_COMISSIONAR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_LOCAL_COB_DESCONTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_COD_BANCO_UZY": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_TROCA_LC_COBRANCA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_VISUALIZA_VENDA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_ULTIMA_REMESSA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_TAM_BOLETO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_NAO_GERA_ROMANEIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_LOCAIS_COBRANCA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_ORIGEM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_ULTIMO_BOLETO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_DIAS_ACRES_FLUXO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_JUROS_EMPRESTIMO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_BENEFICIARIO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_DESPESA_REGISTRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_COBRAR_PARCELA_CLIENTE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_MULTA_DIAS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_VALECRED": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_NAO_LISTAR_REL_CC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_DUPLICATA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_HISTORICO_BAIXA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FILIAL_PAGFOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_MULTIPAG": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_TIPO_DAYCOVAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_DIAS_MAIS_UM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_NAO_PERMITIR_AVISTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_LC_ORIGINAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_NFE_TIPO_PAGAMENTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FACTORY": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FACTORY_CHAVE_NFE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FACTORY_SUJEITO_INFO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FACTORY_CODIGO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_SACADOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_SACADOR_RAZAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_SACADOR_CNPJ": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_SACADOR_ENDERECO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_SACADOR_NUMERO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_SACADOR_BAIRRO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_SACADOR_CIDADE_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_SACADOR_CIDADE_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_SACADOR_CIDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_SACADOR_CEP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CARTEIRA_STR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_NUM_DOC_IGUAL_ARQUIVO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_USA_NOME_EMP_DIF": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_NOME_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_MSG_BOLETO_1": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_MSG_BOLETO_2": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_MSG_BOLETO_3": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_MSG_BOLETO_4": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_MSG_BOLETO_5": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_TROCA_DESC_POR_ABAT": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_BX_TIT_SO_LIQ_NORMAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_NAO_ESPACO_PRIMEIRA_LINHA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_NAFM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_NAFM_IDENT_PROD": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_NAFM_CONTA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CHAVE_NFE_REMESSA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_BANCO_REMESSA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CARTAO_FOR_EMP": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CARTAO_FOR_FIL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_TIPO_CARTAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CARTAO_FOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_REMREG_MCI": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_REMREG_CONTRATO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_REMREG_REMESSA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_REMREG_DIR_REMESSA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_REMREG_DIR_RETORNO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_FX": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_REMREG_ARQUIVO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_REMREG_CONFERENCIA_VALOR": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_NOSSA_NUMERO_SEM_AG": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_VERSAO_REMESSA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_COD_PRE_SAFRA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_NAO_PERMITIR_FATURAMENTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_N_NRO_REMESSA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_RED": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_PREMIUM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_DIAS_MINIMO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_DIAS_BAIXA_DEVOLUCAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_HABILITA_EXTENCAO_RM": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_BOLETO_BANCO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_LAYOUT_BOLETO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_DEVELOPER_APPLICATION_KEY": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CLIENT_ID": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CLIENT_SECRET": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_OPERACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_API_AUX": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_MULTIPAG_MOV_BLOQUEADO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_ACEITE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CONTRATO_EXP_DESCRICAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CONTRATO_EXP_OBSERVACAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_LIMITE_ACE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_LIMITE_ACC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CONTA_POSTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_ADD_ZEROS_HT": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_AGENCIA_SEM_DIGITO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_INCLUIR_COD_CLI": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_SACADOR_AVALISTA_CNPJ": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_SIFRA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_BMA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_PERMITIR_ALTERAR_OBS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_GAVEASUL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_ADN": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_SOMENTE_REEMISSAO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_RANGE_INICIAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_RANGE_FINAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CAMINHO_KEY": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CAMINHO_CRT": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_BAIXA_VALOR_ORIGINAL": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_BS_FIDC": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_MORA_DATA_IGUAL_VENCTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_COD_MODALIDADE": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FORMATA_DADOS_DOCUMENTO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_AGENDAMENTO_ELETRONICO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_IGNORAR_DESPESAS": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FAC_QITECH": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_ID_OFX": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_OFX_OTHER": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_NAO_CONTABILIZAR_BAIXA": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_TIPO_PIX": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_CHAVE_PIX": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_BB_DETALHADO": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                },
+                "LC_FIDC_MULT": {
+                    "description": "",
+                    "value_mapping_notes": ""
+                }
+            }
         }
     },
     "VIEWS": {
