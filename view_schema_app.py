@@ -250,7 +250,7 @@ def main():
         st.stop()
 
     # --- Barra Lateral --- 
-    st.sidebar.header("Configurações de Conexão (Amostra)")
+    st.sidebar.header("Configurações de Conexão e Amostra")
     db_path_input = st.sidebar.text_input("Caminho DB (.fdb)", value=DEFAULT_DB_PATH)
     db_user_input = st.sidebar.text_input("Usuário DB", value=DEFAULT_DB_USER)
     # Senha não fica na sidebar, será pedida no expander
@@ -274,7 +274,6 @@ def main():
         else:
             st.sidebar.error("Falha ao salvar.")
     st.sidebar.caption(f"Salvo em: {METADATA_FILE}")
-    sample_size_input = st.sidebar.number_input("Tamanho da Amostra (Preview/Final)", min_value=1, max_value=100, value=DEFAULT_SAMPLE_SIZE)
 
     # --- Conteúdo Principal ---
     st.subheader("Filtro de Objetos")
@@ -302,12 +301,55 @@ def main():
 
     # --- Lógica ao Selecionar Objeto --- 
     if selected_object:
+        # Limpa resultados anteriores se o objeto mudou
+        if st.session_state.get('last_displayed_sample_object') != selected_object:
+            st.session_state.sample_display_df = None
+            st.session_state.last_displayed_sample_object = selected_object
+
         object_info = schema_data[selected_object]
         object_type = object_info.get("object_type", "TABLE")
         key_type = object_type + "S"
+        
         st.header(f"Anotando: `{selected_object}` ({object_type})")
+        st.divider()
 
-        # --- MOVIDO: Buscar e Exibir Amostra de Dados Completa PRIMEIRO --- 
+        # --- NOVA SEÇÃO: Visualizar Amostra de Dados ---
+        with st.expander(f"Visualizar Amostra de Dados de '{selected_object}'", expanded=False):
+            st.write("**Buscar Amostra:**")
+            sample_sizes = [10, 50, 100, 500, 1000, 5000]
+            cols_buttons = st.columns(len(sample_sizes)) 
+
+            password_to_use = "M@nagers2023" # Senha hardcoded (como em outras partes desta versão)
+            
+            for i, size in enumerate(sample_sizes):
+                with cols_buttons[i]:
+                    if st.button(f"{size} linhas", key=f"btn_fetch_display_sample_{size}_{selected_object}", use_container_width=True):
+                        with st.spinner(f"Buscando {size} linhas para visualização..."):
+                            st.session_state.sample_display_df = fetch_sample_data(
+                                db_path=db_path_input, user=db_user_input, password=password_to_use,
+                                charset=DEFAULT_DB_CHARSET, table_name=selected_object,
+                                sample_size=size 
+                            )
+                            st.rerun() # Re-executa para mostrar o DF
+            
+            st.divider()
+            # Exibe o resultado da última busca de amostra para exibição
+            if isinstance(st.session_state.get('sample_display_df'), pd.DataFrame):
+                df_to_show = st.session_state.sample_display_df
+                st.info(f"Exibindo {len(df_to_show)} linhas.")
+                if not df_to_show.empty:
+                    st.dataframe(df_to_show, use_container_width=True)
+                else:
+                    st.info(f"A consulta da amostra não retornou linhas.")
+            elif isinstance(st.session_state.get('sample_display_df'), str): # Se for erro
+                 st.error(f"Erro ao buscar amostra: {st.session_state.sample_display_df}")
+            else:
+                st.caption("Clique em um dos botões acima para buscar e exibir uma amostra dos dados.")
+        st.divider()
+        # --- FIM DA NOVA SEÇÃO ---
+
+        # --- Buscar Amostra INICIAL (para exemplos das colunas - LÓGICA EXISTENTE MANTIDA) ---
+        # A busca ainda precisa acontecer para popular exemplos das colunas
         sample_data_key = f"sample_data_{selected_object}"
         if sample_data_key not in st.session_state:
             logger.info(f"Buscando amostra para {selected_object} pela primeira vez nesta sessão.")
@@ -319,7 +361,7 @@ def main():
                     password=password_to_use,
                     charset=DEFAULT_DB_CHARSET,
                     table_name=selected_object,
-                    sample_size=sample_size_input
+                    sample_size=DEFAULT_SAMPLE_SIZE
                 )
         sample_df = st.session_state.get(sample_data_key, None)
 
