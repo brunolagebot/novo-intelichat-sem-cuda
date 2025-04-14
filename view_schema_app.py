@@ -7,6 +7,7 @@ import os
 from collections import defaultdict
 import re # Necessário para limpar o nome do tipo
 import datetime # NOVO: Para timestamps
+import time # GARANTIR QUE ESTE IMPORT ESTEJA PRESENTE
 # Importar a função de chat do nosso cliente Ollama
 from src.ollama_integration.client import chat_completion
 
@@ -55,6 +56,7 @@ def get_type_explanation(type_string):
 
 # --- Constante para arquivo de timestamps ---
 RUN_TIMES_FILE = "run_times.json"
+OVERVIEW_COUNTS_FILE = "overview_counts.json" # NOVO: Arquivo para contagens
 
 # --- Funções Auxiliares --- 
 
@@ -224,93 +226,109 @@ def find_existing_description(metadata, target_col_name):
             return col_meta['description']
     return None # Não encontrado
 
-# --- Função para Contar Linhas (Reintroduzida) ---
+# --- Função para Contar Linhas (MODIFICADA) ---
 def fetch_row_count(db_path, user, password, charset, table_name):
     """Busca a contagem de linhas de uma tabela/view específica no Firebird."""
     conn = None
+    cur = None # Inicializa cur fora do try
     try:
         logger.info(f"Buscando contagem de linhas para {table_name}")
         conn = fdb.connect(dsn=db_path, user=user, password=password, charset=charset)
         cur = conn.cursor()
         sql = f'SELECT COUNT(*) FROM "{table_name}"'
         cur.execute(sql)
-        count = cur.fetchone()[0] # Pega o primeiro (e único) valor da primeira linha
+        count = cur.fetchone()[0] 
         logger.info(f"Contagem para {table_name}: {count}")
+        # Fechar cursor aqui após sucesso também é bom
+        cur.close()
+        cur = None 
         return count
     except fdb.Error as e:
         logger.error(f"Erro do Firebird ao buscar contagem para {table_name}: {e}", exc_info=True)
-        # Retorna a string de erro em vez de -1 para exibição na tabela
         return f"Erro DB: {e.args[0] if e.args else e}"
     except Exception as e:
         logger.exception(f"Erro inesperado ao buscar contagem para {table_name}:")
-        # Retorna a string de erro
         return f"Erro inesperado: {e}"
     finally:
-        if conn:
-            conn.close()
-            logger.debug(f"Conexão para busca de contagem ({table_name}) fechada.")
+        # Garante que cursor e conexão sejam fechados
+        if cur is not None:
+            try:
+                cur.close()
+                logger.debug(f"Cursor para contagem ({table_name}) fechado no finally.")
+            except fdb.Error as close_err:
+                 # Logar erro ao fechar cursor, mas continuar para fechar conexão
+                 logger.warning(f"Erro ao fechar cursor para {table_name} no finally: {close_err}")
+        if conn is not None:
+            try:
+                conn.close()
+                logger.debug(f"Conexão para busca de contagem ({table_name}) fechada no finally.")
+            except fdb.Error as close_err:
+                 # Logar erro ao fechar conexão
+                 logger.warning(f"Erro ao fechar conexão para {table_name} no finally: {close_err}")
 
 # --- NOVA FUNÇÃO: Gerar Visão Geral da Documentação ---
 # (Adaptada para esta versão - sem cache, sem contar linhas reais)
 def generate_documentation_overview(schema_data):
-    """
-    Analisa os metadados carregados e gera um DataFrame com o status da documentação
-    para cada tabela e view.
-    """
+    """Gera DataFrame da visão geral, incluindo contagens/timestamps do cache."""
     logger.info("Iniciando generate_documentation_overview...")
     overview_data = []
-    # Nesta versão, schema_data vem de load_schema e não tem TABLES/VIEWS separados
-    # Iteramos diretamente sobre as chaves do schema_data
-    
     total_objects_processed = 0
+    metadata = st.session_state.get('metadata', {}) # Metadados para desc/notas
+    overview_counts = st.session_state.get("overview_row_counts", {}) # Contagens cacheadas
+
     for name, info in schema_data.items():
-        object_type = info.get('object_type', 'DESCONHECIDO') # Pega tipo do schema
-        # Não processa se não for TABLE ou VIEW (ex: constraints soltas)
+        object_type = info.get('object_type', 'DESCONHECIDO')
         if object_type not in ["TABLE", "VIEW"]:
              continue
 
-        logger.debug(f"Processando objeto: {name} (Tipo: {object_type})")
+        logger.debug(f"Processando objeto para visão geral: {name} (Tipo: {object_type})")
         total_objects_processed += 1
-        columns = info.get('columns', []) # É uma lista de dicts nesta versão
+        columns = info.get('columns', [])
         total_cols = len(columns)
         
-        # Precisamos carregar metadados para contar descrições/notas
-        metadata = st.session_state.get('metadata', {}) # Pega metadados da sessão
-        key_type = object_type + "S" # TABLES ou VIEWS
+        key_type = object_type + "S"
         object_meta = metadata.get(key_type, {}).get(name, {})
         object_columns_meta = object_meta.get('COLUMNS', {})
         
         described_cols = 0
         noted_cols = 0
-
         if total_cols > 0:
-            for col_def in columns: # Itera sobre a definição do schema
+            for col_def in columns:
                 col_name = col_def.get('name')
                 if col_name:
                     col_meta = object_columns_meta.get(col_name, {})
-                    if col_meta.get('description', '').strip():
-                        described_cols += 1
-                    if col_meta.get('value_mapping_notes', '').strip():
-                        noted_cols += 1
-            
+                    if col_meta.get('description', '').strip(): described_cols += 1
+                    if col_meta.get('value_mapping_notes', '').strip(): noted_cols += 1
             desc_perc = (described_cols / total_cols) * 100
             notes_perc = (noted_cols / total_cols) * 100
         else:
-            desc_perc = 0
-            notes_perc = 0
+            desc_perc = 0; notes_perc = 0
 
-        # Pega a contagem de linhas do estado da sessão, se disponível
-        overview_counts = st.session_state.get("overview_row_counts", {})
-        row_count_display = overview_counts.get(name, "N/A") # Pega do cache ou N/A
-        # Formata se for número, mantém como está se for erro (string) ou N/A
-        if isinstance(row_count_display, int) and row_count_display >= 0:
-             row_count_display = f"{row_count_display:,}"
+        # Recupera contagem e timestamp do cache
+        count_info = overview_counts.get(name, {})
+        row_count_val = count_info.get("count", "N/A")
+        timestamp_val = count_info.get("timestamp")
+
+        # Formata contagem para exibição
+        row_count_display = row_count_val
+        if isinstance(row_count_val, int) and row_count_val >= 0:
+             row_count_display = f"{row_count_val:,}"
+        
+        # Formata timestamp para exibição
+        timestamp_display = "Nunca"
+        if timestamp_val:
+            try:
+                dt_obj = datetime.datetime.fromisoformat(timestamp_val)
+                timestamp_display = dt_obj.strftime("%d/%m/%y %H:%M") # Formato mais curto
+            except ValueError:
+                 timestamp_display = "Inválido" # Se o timestamp salvo for inválido
 
         overview_data.append({
             'Objeto': name,
             'Tipo': object_type,
             'Total Colunas': total_cols,
-            'Total Linhas': row_count_display, # Usa valor do cache ou N/A
+            'Total Linhas': row_count_display,
+            'Última Contagem': timestamp_display, # NOVA COLUNA
             'Colunas Descritas': described_cols,
             'Colunas com Notas': noted_cols,
             '% Descritas': f"{desc_perc:.1f}%",
@@ -318,10 +336,12 @@ def generate_documentation_overview(schema_data):
         })
 
     df_overview = pd.DataFrame(overview_data)
-    # Ordenar por tipo e depois por nome do objeto
     if not df_overview.empty:
-        df_overview = df_overview.sort_values(by=['Tipo', 'Objeto']).reset_index(drop=True)
-    logger.info(f"generate_documentation_overview concluído. Total de objetos processados: {total_objects_processed}. Shape do DataFrame gerado: {df_overview.shape}")
+        # Ordenar colunas para melhor visualização
+        cols_order = ['Objeto', 'Tipo', 'Total Colunas', 'Total Linhas', 'Última Contagem', 
+                      'Colunas Descritas', '% Descritas', 'Colunas com Notas', '% Com Notas']
+        df_overview = df_overview[cols_order].sort_values(by=['Tipo', 'Objeto']).reset_index(drop=True)
+    logger.info(f"generate_documentation_overview concluído. Shape: {df_overview.shape}")
     return df_overview
 
 # --- NOVAS Funções Auxiliares para Timestamps ---
@@ -356,6 +376,33 @@ def save_run_times(run_times_data, file_path):
         st.error(f"Erro inesperado ao salvar timestamps: {e}")
         return False
 
+# --- NOVAS Funções Auxiliares para Contagens ---
+def load_overview_counts(file_path):
+    """Carrega as contagens e timestamps da visão geral."""
+    if os.path.exists(file_path):
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except json.JSONDecodeError:
+            logging.warning(f"Aviso: Arquivo de contagens '{file_path}' inválido.")
+            return {}
+        except Exception as e:
+            logging.error(f"Erro inesperado ao carregar contagens: {e}")
+            return {}
+    else:
+        return {}
+
+def save_overview_counts(counts_data, file_path):
+    """Salva o dicionário de contagens e timestamps."""
+    try:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(counts_data, f, indent=4)
+        logging.info(f"Contagens da visão geral salvas em {file_path}")
+        return True
+    except Exception as e:
+        logging.error(f"Erro ao salvar contagens da visão geral: {e}")
+        return False
+
 # --- Função Principal da Aplicação --- 
 def main():
     st.set_page_config(page_title="Anotador de Esquema Firebird", layout="wide")
@@ -377,7 +424,7 @@ def main():
     if 'run_times' not in st.session_state:
         st.session_state.run_times = load_run_times(RUN_TIMES_FILE)
     if 'overview_row_counts' not in st.session_state:
-         st.session_state.overview_row_counts = {} # Inicia cache de contagem vazio
+         st.session_state.overview_row_counts = load_overview_counts(OVERVIEW_COUNTS_FILE)
 
     # Carrega o schema técnico (estrutura real do DB)
     schema_data = load_schema(SCHEMA_FILE)
@@ -431,59 +478,118 @@ def main():
     # --- Conteúdo Principal (Condicional ao Modo) ---
 
     if st.session_state.app_mode == "Visão Geral da Documentação":
-        st.title("Visão Geral da Documentação do Esquema")
-        st.markdown("Acompanhe o progresso da documentação e contagem de linhas.") # Texto atualizado
+        st.title("Visão Geral da Documentação e Contagem")
         
         if schema_data:
              try:
-                 # Gera e exibe a tabela (usará st.session_state.overview_row_counts se populado)
                  df_overview = generate_documentation_overview(schema_data)
                  st.dataframe(df_overview, use_container_width=True)
                  
                  st.divider()
-                 # --- Botão e Lógica para Calcular Contagens --- 
-                 if st.button("Calcular Contagem de Linhas (Todos)", key="btn_count_all"):
-                      password_to_use = "M@nagers2023" # Senha hardcoded ainda
-                      objects_to_count = df_overview['Objeto'].tolist() # Pega nomes da tabela gerada
-                      total_obj = len(objects_to_count)
-                      progress_bar = st.progress(0, text="Iniciando contagem de linhas...")
-                      temp_counts = {} # Armazena contagens desta execução
-
-                      with st.spinner(f"Calculando contagem para {total_obj} objetos..."): 
-                          for i, obj_name in enumerate(objects_to_count):
-                              progress_text = f"Contando {obj_name}... ({i+1}/{total_obj})"
-                              progress_bar.progress((i + 1) / total_obj, text=progress_text)
-                              logger.info(f"Executando fetch_row_count para: {obj_name}")
-                              # Passa configs da sidebar para a função
-                              count_result = fetch_row_count(
-                                  db_path=db_path_input, user=db_user_input, 
-                                  password=password_to_use, # Usar a senha correta
-                                  charset=DEFAULT_DB_CHARSET, table_name=obj_name
-                              )
-                              temp_counts[obj_name] = count_result # Armazena resultado (int ou erro)
-                      
-                      # Atualiza estado da sessão e timestamp
-                      st.session_state.overview_row_counts = temp_counts
-                      now_iso = datetime.datetime.now().isoformat()
-                      st.session_state.run_times['last_row_count_all'] = now_iso
-                      save_run_times(st.session_state.run_times, RUN_TIMES_FILE)
-                      progress_bar.progress(1.0, text="Contagem concluída!")
-                      st.toast("Contagem de linhas concluída e salva!")
-                      time.sleep(1) # Pausa para ver msg
-                      st.rerun() # Re-executa para mostrar os resultados na tabela
                  
-                 # --- Exibe Última Execução --- 
-                 last_run = st.session_state.run_times.get('last_row_count_all')
-                 if last_run:
-                      # Tenta formatar para melhor leitura, se falhar mostra ISO
-                      try:
-                          dt_obj = datetime.datetime.fromisoformat(last_run)
-                          last_run_display = dt_obj.strftime("%d/%m/%Y %H:%M:%S")
-                      except ValueError:
-                           last_run_display = last_run
-                      st.caption(f"Última contagem completa realizada em: {last_run_display}")
-                 else:
-                      st.caption("Contagem completa de linhas ainda não foi realizada.")
+                 # --- Ações de Contagem --- 
+                 col_act_all, col_act_single = st.columns([1, 2])
+                 
+                 with col_act_all:
+                    # --- Botão Contar Todos --- 
+                    if st.button("Calcular Contagem (Todos)", key="btn_count_all", use_container_width=True):
+                        password_to_use = "M@nagers2023" # Senha hardcoded ainda
+                        objects_to_count = df_overview['Objeto'].tolist()
+                        total_obj = len(objects_to_count)
+                        progress_bar = st.progress(0, text="Iniciando contagem...")
+                        local_counts = {} # NOVO: Dicionário local para acumular
+                        error_occurred = False
+
+                        with st.spinner(f"Calculando contagem para {total_obj} objetos..."):
+                            for i, obj_name in enumerate(objects_to_count):
+                                progress_text = f"Contando {obj_name}... ({i+1}/{total_obj})"
+                                progress_bar.progress((i + 1) / total_obj, text=progress_text)
+                                logger.info(f"Executando fetch_row_count para: {obj_name}")
+                                count_result = fetch_row_count(
+                                    db_path=db_path_input, user=db_user_input, 
+                                    password=password_to_use, charset=DEFAULT_DB_CHARSET, 
+                                    table_name=obj_name
+                                )
+                                now_iso_obj = datetime.datetime.now().isoformat()
+                                # Atualiza dicionário LOCAL
+                                local_counts[obj_name] = {
+                                     "count": count_result,
+                                     "timestamp": now_iso_obj
+                                }
+                                if isinstance(count_result, str) and count_result.startswith("Erro"):
+                                     error_occurred = True
+                                     logger.warning(f"Erro ao contar {obj_name}: {count_result}")
+                        
+                        # Atualiza ESTADO DA SESSÃO com todos os resultados APÓS o loop
+                        st.session_state.overview_row_counts = local_counts
+                        # Salva as contagens do estado da sessão
+                        save_overview_counts(st.session_state.overview_row_counts, OVERVIEW_COUNTS_FILE)
+                        
+                        # Atualiza timestamp geral apenas se não houve erro
+                        if not error_occurred:
+                             now_iso_all = datetime.datetime.now().isoformat()
+                             st.session_state.run_times['last_row_count_all'] = now_iso_all
+                             save_run_times(st.session_state.run_times, RUN_TIMES_FILE)
+                             progress_bar.progress(1.0, text="Contagem concluída!")
+                             st.toast("Contagem de linhas concluída e salva!", icon="✅")
+                        else:
+                             progress_bar.progress(1.0, text="Contagem concluída (com erros).")
+                             st.warning("Contagem concluída, mas ocorreram erros (ver logs ou tabela). Timestamp geral não atualizado.")
+                        
+                        time.sleep(0.1)
+                        st.rerun() 
+                    
+                    # Exibe Última Execução Completa Bem Sucedida
+                    last_run_all = st.session_state.run_times.get('last_row_count_all')
+                    if last_run_all:
+                        try:
+                            dt_obj_all = datetime.datetime.fromisoformat(last_run_all)
+                            last_run_display_all = dt_obj_all.strftime("%d/%m/%Y %H:%M:%S")
+                        except ValueError:
+                            last_run_display_all = last_run_all
+                        st.caption(f"Última contagem completa OK: {last_run_display_all}")
+                    else:
+                        st.caption("Contagem completa ainda não foi realizada com sucesso.")
+
+                 with col_act_single:
+                     # --- Contagem Individual --- 
+                     object_list = df_overview['Objeto'].tolist()
+                     if object_list:
+                         selected_obj_single = st.selectbox(
+                             "Contar linhas para objeto específico:", 
+                             options=object_list, key="sel_single_count", label_visibility="collapsed"
+                         )
+                         # LOG 1: Objeto selecionado
+                         logger.debug(f"[Contagem Individual] Objeto selecionado no selectbox: {selected_obj_single}")
+                         
+                         if st.button("Contar Objeto Selecionado", key="btn_count_single", use_container_width=True):
+                              password_to_use_single = "M@nagers2023"
+                              with st.spinner(f"Contando linhas para {selected_obj_single}..."):
+                                   # LOG 2: Objeto a ser contado
+                                   logger.info(f"[Contagem Individual] Chamando fetch_row_count para: {selected_obj_single}")
+                                   count_result_single = fetch_row_count(
+                                        db_path=db_path_input, user=db_user_input, 
+                                        password=password_to_use_single, charset=DEFAULT_DB_CHARSET, 
+                                        table_name=selected_obj_single
+                                    )
+                                   # LOG 3: Resultado da contagem
+                                   logger.info(f"[Contagem Individual] Resultado para {selected_obj_single}: {count_result_single}")
+                                   
+                                   now_iso_single = datetime.datetime.now().isoformat()
+                                   entry_to_update = {
+                                         "count": count_result_single,
+                                         "timestamp": now_iso_single
+                                    }
+                                   # LOG 4: Entrada a ser atualizada no estado
+                                   logger.debug(f"[Contagem Individual] Atualizando estado para {selected_obj_single} com: {entry_to_update}")
+                                   st.session_state.overview_row_counts[selected_obj_single] = entry_to_update
+                                   
+                                   save_overview_counts(st.session_state.overview_row_counts, OVERVIEW_COUNTS_FILE)
+                                   st.toast(f"Contagem para {selected_obj_single} atualizada!")
+                                   time.sleep(0.1)
+                                   st.rerun()
+                     else:
+                          st.caption("Nenhum objeto para selecionar.")
 
                  # Adiciona legenda
                  st.subheader("Legenda:")
@@ -492,15 +598,16 @@ def main():
                  *   **Tipo:** Indica se é TABLE ou VIEW.
                  *   **Total Colunas:** Número total de colunas no objeto (do schema técnico).
                  *   **Total Linhas:** Contagem real não implementada (N/A).
+                 *   **Última Contagem:** Última vez que a contagem foi realizada.
                  *   **Colunas Descritas:** Número de colunas com `description` preenchido nos metadados.
                  *   **Colunas com Notas:** Número de colunas com `value_mapping_notes` preenchido nos metadados.
                  *   **% Descritas / % Com Notas:** Percentuais correspondentes.
                  """)
              except Exception as e:
                  st.error(f"Erro ao gerar a visão geral da documentação: {e}")
-                 logger.exception("Erro em generate_documentation_overview:")
+                 logger.exception("Erro na seção Visão Geral:")
         else:
-             st.warning("Esquema técnico não carregado. Não é possível gerar a visão geral.")
+             st.warning("Esquema técnico não carregado.")
 
     elif st.session_state.app_mode == "Explorar Esquema":
         st.title("📝 Anotador de Esquema Firebird") # Título do modo original
@@ -628,7 +735,7 @@ def main():
                          suggestion = generate_ai_description(prompt_column)
                          if suggestion: st.session_state.metadata.setdefault(key_type, {}).setdefault(selected_object, {}).setdefault('COLUMNS', {}).setdefault(col_name, {})['description'] = suggestion
                          else: logger.warning(f"Não foi possível gerar sugestão para a coluna {col_name}")
-                     progress_bar.progress(1.0, text="Sugestões concluídas!"); st.toast("Sugestões geradas!"); import time; time.sleep(1); st.rerun()
+                     progress_bar.progress(1.0, text="Sugestões concluídas!"); st.toast("Sugestões geradas!"); time.sleep(1); st.rerun()
 
 
             # --- Anotação das Colunas (Lógica existente) ---

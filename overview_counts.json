@@ -1,0 +1,22 @@
+{
+    "ABATE_CLASSIF_PECUARISTA": {
+        "count": 0,
+        "timestamp": "2025-04-14T12:12:48.010060"
+    },
+    "ABATE_COMPRADOR": {
+        "count": 0,
+        "timestamp": "2025-04-14T12:13:06.768651"
+    },
+    "ABATE_CONFIG_RECEBIMENTO_ANIMAL": {
+        "count": 0,
+        "timestamp": "2025-04-14T12:13:14.791718"
+    },
+    "TABELA_FILIAL_PARAM": {
+        "count": 1,
+        "timestamp": "2025-04-14T12:14:15.858794"
+    },
+    "VIEW_DASH_COMPRA_ANIMAL_PEDIDO": {
+        "count": 2923,
+        "timestamp": "2025-04-14T12:14:39.118537"
+    }
+}

@@ -384,7 +384,7 @@
             "description": "Não sei ainda",
             "COLUMNS": {
                 "CLP_EMPRESA": {
-                    "description": "",
+                    "description": "Teste",
                     "value_mapping_notes": ""
                 },
                 "CLP_FILIAL": {
