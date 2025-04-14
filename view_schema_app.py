@@ -324,6 +324,7 @@ def generate_documentation_overview(schema_data):
                  timestamp_display = "Inválido" # Se o timestamp salvo for inválido
 
         overview_data.append({
+            'Selecionar': False, # NOVA COLUNA BOOLEANA
             'Objeto': name,
             'Tipo': object_type,
             'Total Colunas': total_cols,
@@ -338,7 +339,7 @@ def generate_documentation_overview(schema_data):
     df_overview = pd.DataFrame(overview_data)
     if not df_overview.empty:
         # Ordenar colunas para melhor visualização
-        cols_order = ['Objeto', 'Tipo', 'Total Colunas', 'Total Linhas', 'Última Contagem', 
+        cols_order = ['Selecionar', 'Objeto', 'Tipo', 'Total Colunas', 'Total Linhas', 'Última Contagem',
                       'Colunas Descritas', '% Descritas', 'Colunas com Notas', '% Com Notas']
         df_overview = df_overview[cols_order].sort_values(by=['Tipo', 'Objeto']).reset_index(drop=True)
     logger.info(f"generate_documentation_overview concluído. Shape: {df_overview.shape}")
@@ -479,22 +480,32 @@ def main():
 
     if st.session_state.app_mode == "Visão Geral da Documentação":
         st.title("Visão Geral da Documentação e Contagem")
+        st.markdown("Marque os objetos na coluna 'Selecionar' e clique no botão para contar as linhas.")
         
         if schema_data:
              try:
-                 df_overview = generate_documentation_overview(schema_data)
-                 st.dataframe(df_overview, use_container_width=True)
+                 df_initial_overview = generate_documentation_overview(schema_data)
+                 
+                 # Usar st.data_editor em vez de st.dataframe
+                 edited_df = st.data_editor(
+                     df_initial_overview, 
+                     key="overview_editor",
+                     use_container_width=True,
+                     # Desabilitar edição para outras colunas (opcional, mas recomendado)
+                     disabled=['Objeto', 'Tipo', 'Total Colunas', 'Total Linhas', 'Última Contagem',
+                               'Colunas Descritas', '% Descritas', 'Colunas com Notas', '% Com Notas']
+                 )
                  
                  st.divider()
                  
-                 # --- Ações de Contagem --- 
-                 col_act_all, col_act_single = st.columns([1, 2])
+                 # --- Ações de Contagem (MODIFICADO) --- 
+                 col_act_all, col_act_selected = st.columns([1, 2])
                  
                  with col_act_all:
                     # --- Botão Contar Todos --- 
                     if st.button("Calcular Contagem (Todos)", key="btn_count_all", use_container_width=True):
                         password_to_use = "M@nagers2023" # Senha hardcoded ainda
-                        objects_to_count = df_overview['Objeto'].tolist()
+                        objects_to_count = df_initial_overview['Objeto'].tolist()
                         total_obj = len(objects_to_count)
                         progress_bar = st.progress(0, text="Iniciando contagem...")
                         local_counts = {} # NOVO: Dicionário local para acumular
@@ -551,46 +562,47 @@ def main():
                     else:
                         st.caption("Contagem completa ainda não foi realizada com sucesso.")
 
-                 with col_act_single:
-                     # --- Contagem Individual --- 
-                     object_list = df_overview['Objeto'].tolist()
-                     if object_list:
-                         selected_obj_single = st.selectbox(
-                             "Contar linhas para objeto específico:", 
-                             options=object_list, key="sel_single_count", label_visibility="collapsed"
-                         )
-                         # LOG 1: Objeto selecionado
-                         logger.debug(f"[Contagem Individual] Objeto selecionado no selectbox: {selected_obj_single}")
-                         
-                         if st.button("Contar Objeto Selecionado", key="btn_count_single", use_container_width=True):
-                              password_to_use_single = "M@nagers2023"
-                              with st.spinner(f"Contando linhas para {selected_obj_single}..."):
-                                   # LOG 2: Objeto a ser contado
-                                   logger.info(f"[Contagem Individual] Chamando fetch_row_count para: {selected_obj_single}")
-                                   count_result_single = fetch_row_count(
-                                        db_path=db_path_input, user=db_user_input, 
-                                        password=password_to_use_single, charset=DEFAULT_DB_CHARSET, 
-                                        table_name=selected_obj_single
-                                    )
-                                   # LOG 3: Resultado da contagem
-                                   logger.info(f"[Contagem Individual] Resultado para {selected_obj_single}: {count_result_single}")
-                                   
-                                   now_iso_single = datetime.datetime.now().isoformat()
-                                   entry_to_update = {
-                                         "count": count_result_single,
-                                         "timestamp": now_iso_single
-                                    }
-                                   # LOG 4: Entrada a ser atualizada no estado
-                                   logger.debug(f"[Contagem Individual] Atualizando estado para {selected_obj_single} com: {entry_to_update}")
-                                   st.session_state.overview_row_counts[selected_obj_single] = entry_to_update
-                                   
-                                   save_overview_counts(st.session_state.overview_row_counts, OVERVIEW_COUNTS_FILE)
-                                   st.toast(f"Contagem para {selected_obj_single} atualizada!")
-                                   time.sleep(0.1)
-                                   st.rerun()
-                     else:
-                          st.caption("Nenhum objeto para selecionar.")
-
+                 with col_act_selected: 
+                     # --- Botão Contar SELECIONADOS --- 
+                     objects_selected = edited_df[edited_df["Selecionar"] == True]['Objeto'].tolist()
+                     
+                     if st.button(f"Contar Linhas de {len(objects_selected)} Objeto(s) Selecionado(s)", key="btn_count_selected", disabled=not objects_selected, use_container_width=True):
+                          password_to_use_sel = "M@nagers2023"
+                          total_sel = len(objects_selected)
+                          progress_bar_sel = st.progress(0, text="Iniciando contagem dos selecionados...")
+                          error_occurred_sel = False
+                          
+                          with st.spinner(f"Calculando contagem para {total_sel} objetos selecionados..."):
+                              for i, obj_name_sel in enumerate(objects_selected):
+                                  progress_text_sel = f"Contando {obj_name_sel}... ({i+1}/{total_sel})"
+                                  progress_bar_sel.progress((i + 1) / total_sel, text=progress_text_sel)
+                                  logger.info(f"[Contagem Selecionados] Chamando fetch_row_count para: {obj_name_sel}")
+                                  count_result_sel = fetch_row_count(
+                                      db_path=db_path_input, user=db_user_input, 
+                                      password=password_to_use_sel, charset=DEFAULT_DB_CHARSET, 
+                                      table_name=obj_name_sel
+                                  )
+                                  now_iso_sel = datetime.datetime.now().isoformat()
+                                  st.session_state.overview_row_counts[obj_name_sel] = {
+                                        "count": count_result_sel,
+                                        "timestamp": now_iso_sel
+                                  }
+                                  if isinstance(count_result_sel, str) and count_result_sel.startswith("Erro"):
+                                       error_occurred_sel = True
+                                       logger.warning(f"[Contagem Selecionados] Erro ao contar {obj_name_sel}: {count_result_sel}")
+                           
+                          save_overview_counts(st.session_state.overview_row_counts, OVERVIEW_COUNTS_FILE)
+                          progress_bar_sel.progress(1.0, text="Contagem dos selecionados concluída!")
+                          if not error_occurred_sel:
+                               st.toast(f"Contagem para {total_sel} objeto(s) selecionado(s) atualizada!", icon="✅")
+                          else:
+                               st.warning(f"Contagem concluída para selecionados, mas ocorreram erros.")
+                          
+                          time.sleep(0.1)
+                          st.rerun()
+                          
+                     st.caption("Marque os objetos na tabela acima para habilitar este botão.")
+                 
                  # Adiciona legenda
                  st.subheader("Legenda:")
                  st.markdown("""
