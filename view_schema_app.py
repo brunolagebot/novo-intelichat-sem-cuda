@@ -6,6 +6,8 @@ import logging
 import os
 from collections import defaultdict
 import re # Necessário para limpar o nome do tipo
+import datetime # NOVO: Para timestamps
+import time # GARANTIR QUE ESTE IMPORT ESTEJA PRESENTE
 # Importar a função de chat do nosso cliente Ollama
 from src.ollama_integration.client import chat_completion
 
@@ -52,9 +54,13 @@ def get_type_explanation(type_string):
         return f"*{explanation}*" if explanation else ""
     return ""
 
+# --- Constante para arquivo de timestamps ---
+RUN_TIMES_FILE = "run_times.json"
+OVERVIEW_COUNTS_FILE = "overview_counts.json" # NOVO: Arquivo para contagens
+
 # --- Funções Auxiliares --- 
 
-@st.cache_data # Cache para estrutura técnica (não muda na sessão)
+# REMOVIDO/COMENTADO: @st.cache_data # Cache para estrutura técnica (não muda na sessão)
 def load_schema(file_path):
     """Carrega o esquema técnico do banco de dados do arquivo JSON."""
     try:
@@ -202,40 +208,328 @@ def generate_ai_description(prompt):
         st.error(f"Erro ao contatar a IA: {e}")
         return None
 
-def find_existing_description(metadata, target_col_name):
-    """Procura por uma descrição existente para um nome de coluna em todo o metadado."""
-    if not metadata or not target_col_name:
-        return None
-    # Procura em Tabelas
-    for table_name, table_meta in metadata.get('TABLES', {}).items():
-        col_meta = table_meta.get('COLUMNS', {}).get(target_col_name)
-        if col_meta and col_meta.get('description'):
-            logger.debug(f"Encontrada descrição existente para '{target_col_name}' na tabela '{table_name}'")
-            return col_meta['description']
-    # Procura em Views
-    for view_name, view_meta in metadata.get('VIEWS', {}).items():
-        col_meta = view_meta.get('COLUMNS', {}).get(target_col_name)
-        if col_meta and col_meta.get('description'):
-            logger.debug(f"Encontrada descrição existente para '{target_col_name}' na view '{view_name}'")
-            return col_meta['description']
-    return None # Não encontrado
+# --- Função find_existing_description (MODIFICADA para usar FKs) ---
+def find_existing_description(metadata, schema_data, current_object_name, target_col_name):
+    """
+    Procura por uma descrição existente para uma coluna:
+    1. Busca por nome exato em outras tabelas/views.
+    2. Se for FK, busca a descrição da PK referenciada.
+    3. Se for PK, busca a descrição de uma coluna FK que a referencie.
+    """
+    if not metadata or not schema_data or not target_col_name or not current_object_name:
+        return None, None # Retorna None para descrição e para a fonte
 
-# --- Inicialização do Estado da Sessão (AGORA DEPOIS DAS FUNÇÕES) --- 
-if 'db_password' not in st.session_state:
-    st.session_state.db_password = ""
-if 'metadata' not in st.session_state:
-    st.session_state.metadata = load_metadata(METADATA_FILE)
-    # Garante que as chaves de nível superior existam após o carregamento inicial
-    st.session_state.metadata.setdefault('TABLES', {})
-    st.session_state.metadata.setdefault('VIEWS', {})
-    st.session_state.metadata.setdefault('_GLOBAL_CONTEXT', 'Digite aqui informações gerais sobre a empresa, o propósito do banco de dados, etc.')
-    logger.info("Metadados carregados para session_state (com chaves de nível superior garantidas).")
+    # 1. Busca por nome exato (prioridade)
+    for obj_type_key in ['TABLES', 'VIEWS', 'DESCONHECIDOS']:
+        for obj_name, obj_meta in metadata.get(obj_type_key, {}).items():
+            # Pula o próprio objeto atual
+            if obj_name == current_object_name:
+                continue
+            col_meta = obj_meta.get('COLUMNS', {}).get(target_col_name)
+            if col_meta and col_meta.get('description', '').strip():
+                desc = col_meta['description']
+                source = f"nome exato em '{obj_name}'"
+                logger.debug(f"Heurística: Descrição encontrada por {source}")
+                return desc, source
+
+    # Se não achou por nome exato, tenta via FKs (precisa do schema_data)
+    current_object_info = schema_data.get(current_object_name)
+    if not current_object_info:
+        return None, None
+    
+    current_constraints = current_object_info.get('constraints', {})
+    current_pk_cols = [col for pk in current_constraints.get('primary_key', []) for col in pk.get('columns', [])]
+
+    # 2. Busca Direta (Se target_col é FK)
+    for fk in current_constraints.get('foreign_keys', []):
+        fk_columns = fk.get('columns', [])
+        ref_table = fk.get('references_table')
+        ref_columns = fk.get('references_columns', [])
+        if target_col_name in fk_columns and ref_table and ref_columns:
+            # Assume FK simples (1 coluna local -> 1 coluna ref)
+            try:
+                idx = fk_columns.index(target_col_name)
+                ref_col_name = ref_columns[idx]
+                # Busca descrição da PK referenciada
+                # Precisa determinar o tipo do objeto referenciado (TABLE/VIEW)
+                ref_obj_type = schema_data.get(ref_table, {}).get('object_type', 'TABLE') # Assume TABLE se não achar
+                ref_obj_type_key = ref_obj_type + "S"
+                
+                ref_col_meta = metadata.get(ref_obj_type_key, {}).get(ref_table, {}).get('COLUMNS', {}).get(ref_col_name)
+                if ref_col_meta and ref_col_meta.get('description', '').strip():
+                    desc = ref_col_meta['description']
+                    source = f"chave estrangeira para '{ref_table}.{ref_col_name}'"
+                    logger.debug(f"Heurística: Descrição encontrada por {source}")
+                    return desc, source
+            except (IndexError, ValueError):
+                logger.warning(f"Inconsistência na FK {fk.get('name')} para coluna {target_col_name}")
+                continue # Tenta próxima FK se houver erro
+
+    # 3. Busca Inversa (Se target_col é PK)
+    if target_col_name in current_pk_cols:
+        # Varre todos os objetos no schema técnico buscando FKs que apontem para cá
+        for other_obj_name, other_obj_info in schema_data.items():
+            if other_obj_name == current_object_name: continue # Pula a própria tabela
+            
+            other_constraints = other_obj_info.get('constraints', {})
+            for other_fk in other_constraints.get('foreign_keys', []):
+                 if other_fk.get('references_table') == current_object_name and \
+                    target_col_name in other_fk.get('references_columns', []):
+                     # Achou uma FK em outra tabela apontando para nossa PK
+                     referencing_columns = other_fk.get('columns', [])
+                     ref_pk_columns = other_fk.get('references_columns', [])
+                     try:
+                         # Acha a coluna local (FK) correspondente à nossa PK
+                         idx_pk = ref_pk_columns.index(target_col_name)
+                         referencing_col_name = referencing_columns[idx_pk]
+                         
+                         # Busca a descrição desta coluna FK na outra tabela
+                         other_obj_type = other_obj_info.get('object_type', 'TABLE')
+                         other_obj_type_key = other_obj_type + "S"
+                         other_col_meta = metadata.get(other_obj_type_key, {}).get(other_obj_name, {}).get('COLUMNS', {}).get(referencing_col_name)
+                         
+                         if other_col_meta and other_col_meta.get('description', '').strip():
+                             desc = other_col_meta['description']
+                             source = f"coluna '{referencing_col_name}' em '{other_obj_name}' (que referencia esta PK)"
+                             logger.debug(f"Heurística: Descrição encontrada por {source}")
+                             return desc, source
+                     except (IndexError, ValueError):
+                          logger.warning(f"Inconsistência na FK {other_fk.get('name')} em {other_obj_name} ao buscar descrição inversa.")
+                          continue # Tenta próxima FK
+
+    return None, None # Nenhuma descrição encontrada
+
+# --- Função para Contar Linhas (MODIFICADA) ---
+def fetch_row_count(db_path, user, password, charset, table_name):
+    """Busca a contagem de linhas de uma tabela/view específica no Firebird."""
+    conn = None
+    cur = None # Inicializa cur fora do try
+    try:
+        logger.info(f"Buscando contagem de linhas para {table_name}")
+        conn = fdb.connect(dsn=db_path, user=user, password=password, charset=charset)
+        cur = conn.cursor()
+        sql = f'SELECT COUNT(*) FROM "{table_name}"'
+        cur.execute(sql)
+        count = cur.fetchone()[0] 
+        logger.info(f"Contagem para {table_name}: {count}")
+        # Fechar cursor aqui após sucesso também é bom
+        cur.close()
+        cur = None 
+        return count
+    except fdb.Error as e:
+        logger.error(f"Erro do Firebird ao buscar contagem para {table_name}: {e}", exc_info=True)
+        return f"Erro DB: {e.args[0] if e.args else e}"
+    except Exception as e:
+        logger.exception(f"Erro inesperado ao buscar contagem para {table_name}:")
+        return f"Erro inesperado: {e}"
+    finally:
+        # Garante que cursor e conexão sejam fechados
+        if cur is not None:
+            try:
+                cur.close()
+                logger.debug(f"Cursor para contagem ({table_name}) fechado no finally.")
+            except fdb.Error as close_err:
+                 # Logar erro ao fechar cursor, mas continuar para fechar conexão
+                 logger.warning(f"Erro ao fechar cursor para {table_name} no finally: {close_err}")
+        if conn is not None:
+            try:
+                conn.close()
+                logger.debug(f"Conexão para busca de contagem ({table_name}) fechada no finally.")
+            except fdb.Error as close_err:
+                 # Logar erro ao fechar conexão
+                 logger.warning(f"Erro ao fechar conexão para {table_name} no finally: {close_err}")
+
+# --- NOVA FUNÇÃO: Gerar Visão Geral da Documentação ---
+# (Adaptada para esta versão - sem cache, sem contar linhas reais)
+def generate_documentation_overview(schema_data):
+    """Gera DataFrame da visão geral, incluindo contagens/timestamps do cache."""
+    logger.info("Iniciando generate_documentation_overview...")
+    overview_data = []
+    total_objects_processed = 0
+    metadata = st.session_state.get('metadata', {}) # Metadados para desc/notas
+    overview_counts = st.session_state.get("overview_row_counts", {}) # Contagens cacheadas
+
+    for name, info in schema_data.items():
+        object_type = info.get('object_type', 'DESCONHECIDO')
+        if object_type not in ["TABLE", "VIEW"]:
+             continue
+
+        logger.debug(f"Processando objeto para visão geral: {name} (Tipo: {object_type})")
+        total_objects_processed += 1
+        columns = info.get('columns', [])
+        total_cols = len(columns)
+        
+        key_type = object_type + "S"
+        object_meta = metadata.get(key_type, {}).get(name, {})
+        object_columns_meta = object_meta.get('COLUMNS', {})
+        
+        described_cols = 0
+        noted_cols = 0
+        if total_cols > 0:
+            for col_def in columns:
+                col_name = col_def.get('name')
+                if col_name:
+                    col_meta = object_columns_meta.get(col_name, {})
+                    if col_meta.get('description', '').strip(): described_cols += 1
+                    if col_meta.get('value_mapping_notes', '').strip(): noted_cols += 1
+            desc_perc = (described_cols / total_cols) * 100
+            notes_perc = (noted_cols / total_cols) * 100
+        else:
+            desc_perc = 0; notes_perc = 0
+
+        # Recupera contagem e timestamp do cache
+        count_info = overview_counts.get(name, {})
+        row_count_val = count_info.get("count", "N/A")
+        timestamp_val = count_info.get("timestamp")
+
+        # Formata contagem para exibição
+        row_count_display = row_count_val
+        if isinstance(row_count_val, int) and row_count_val >= 0:
+             row_count_display = f"{row_count_val:,}"
+        
+        # Formata timestamp para exibição
+        timestamp_display = "Nunca"
+        if timestamp_val:
+            try:
+                dt_obj = datetime.datetime.fromisoformat(timestamp_val)
+                timestamp_display = dt_obj.strftime("%d/%m/%y %H:%M") # Formato mais curto
+            except ValueError:
+                 timestamp_display = "Inválido" # Se o timestamp salvo for inválido
+
+        overview_data.append({
+            'Selecionar': False, # NOVA COLUNA BOOLEANA
+            'Objeto': name,
+            'Tipo': object_type,
+            'Total Colunas': total_cols,
+            'Total Linhas': row_count_display,
+            'Última Contagem': timestamp_display, # NOVA COLUNA
+            'Colunas Descritas': described_cols,
+            'Colunas com Notas': noted_cols,
+            '% Descritas': f"{desc_perc:.1f}%",
+            '% Com Notas': f"{notes_perc:.1f}%"
+        })
+
+    df_overview = pd.DataFrame(overview_data)
+    if not df_overview.empty:
+        # Ordenar colunas para melhor visualização
+        cols_order = ['Selecionar', 'Objeto', 'Tipo', 'Total Colunas', 'Total Linhas', 'Última Contagem',
+                      'Colunas Descritas', '% Descritas', 'Colunas com Notas', '% Com Notas']
+        df_overview = df_overview[cols_order].sort_values(by=['Tipo', 'Objeto']).reset_index(drop=True)
+    logger.info(f"generate_documentation_overview concluído. Shape: {df_overview.shape}")
+    return df_overview
+
+# --- NOVAS Funções Auxiliares para Timestamps ---
+def load_run_times(file_path):
+    """Carrega os timestamps de execução do arquivo JSON."""
+    if os.path.exists(file_path):
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except json.JSONDecodeError:
+            logging.warning(f"Aviso: Arquivo de timestamps '{file_path}' inválido. Começando vazio.")
+            return {}
+        except Exception as e:
+            logging.error(f"Erro inesperado ao carregar timestamps: {e}")
+            return {}
+    else:
+        return {}
+
+def save_run_times(run_times_data, file_path):
+    """Salva o dicionário de timestamps no arquivo JSON."""
+    try:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(run_times_data, f, indent=4)
+        logging.info(f"Timestamps salvos com sucesso em {file_path}")
+        return True
+    except IOError as e:
+        logging.error(f"Erro de IO ao salvar timestamps em {file_path}: {e}")
+        st.error(f"Erro ao salvar arquivo de timestamps: {e}")
+        return False
+    except Exception as e:
+        logging.error(f"Erro inesperado ao salvar timestamps: {e}")
+        st.error(f"Erro inesperado ao salvar timestamps: {e}")
+        return False
+
+# --- NOVAS Funções Auxiliares para Contagens ---
+def load_overview_counts(file_path):
+    """Carrega as contagens e timestamps da visão geral."""
+    if os.path.exists(file_path):
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except json.JSONDecodeError:
+            logging.warning(f"Aviso: Arquivo de contagens '{file_path}' inválido.")
+            return {}
+        except Exception as e:
+            logging.error(f"Erro inesperado ao carregar contagens: {e}")
+            return {}
+    else:
+        return {}
+
+def save_overview_counts(counts_data, file_path):
+    """Salva o dicionário de contagens e timestamps."""
+    try:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(counts_data, f, indent=4)
+        logging.info(f"Contagens da visão geral salvas em {file_path}")
+        return True
+    except Exception as e:
+        logging.error(f"Erro ao salvar contagens da visão geral: {e}")
+        return False
+
+# --- NOVA FUNÇÃO: Calcular Contagem de Referências FK ---
+# REMOVIDO/COMENTADO: @st.cache_data # Cache porque depende apenas do schema técnico
+def calculate_fk_reference_counts(schema_data):
+    """Calcula quantas vezes cada coluna é referenciada por uma FK."""
+    reference_counts = defaultdict(int)
+    if not schema_data:
+        return []
+
+    logger.info("[FK Count] Iniciando cálculo de referências...")
+    # Itera sobre todos os objetos para encontrar FKs
+    for obj_name, obj_info in schema_data.items():
+        # LOG: Nome do objeto sendo processado
+        logger.debug(f"[FK Count] Processando objeto: {obj_name}")
+        constraints = obj_info.get('constraints', {})
+        foreign_keys = constraints.get('foreign_keys', [])
+        # LOG: Lista de FKs encontrada para este objeto
+        logger.debug(f"[FK Count]   Lista foreign_keys encontrada para {obj_name}: {foreign_keys}")
+
+        # Itera sobre cada FK definida neste objeto
+        if not foreign_keys:
+             logger.debug(f"[FK Count]   Nenhuma FK encontrada para {obj_name}, pulando.")
+             continue # Pula para o próximo objeto se não houver FKs
+
+        for i, fk in enumerate(foreign_keys):
+            # LOG: Detalhes da FK sendo processada
+            logger.debug(f"[FK Count]     Processando FK #{i+1} em {obj_name}: {fk}")
+            ref_table = fk.get('references_table')
+            ref_columns = fk.get('references_columns', [])
+            # LOG: Tabela e colunas referenciadas extraídas da FK
+            logger.debug(f"[FK Count]       -> references_table: {ref_table}, references_columns: {ref_columns}")
+
+            # Incrementa a contagem para cada coluna referenciada
+            if ref_table and ref_columns:
+                for ref_col in ref_columns:
+                    # Usa tupla (tabela, coluna) como chave
+                    reference_counts[(ref_table, ref_col)] += 1
+                    logger.debug(f"[FK Count]         -> Incrementando contagem para '{ref_table}.{ref_col}'")
+            else:
+                logger.debug(f"[FK Count]         -> FK ignorada (sem ref_table ou ref_columns).")
+    
+    # Converte para lista de tuplas e ordena pela contagem (descendente)
+    sorted_references = sorted(
+        [(table, col, count) for (table, col), count in reference_counts.items()],
+        key=lambda item: item[2], # Ordena pelo terceiro elemento (contagem)
+        reverse=True
+    )
+    logger.info(f"[FK Count] Cálculo de referências concluído. {len(sorted_references)} colunas referenciadas encontradas.")
+    return sorted_references
 
 # --- Função Principal da Aplicação --- 
 def main():
     st.set_page_config(page_title="Anotador de Esquema Firebird", layout="wide")
-    st.title("📝 Anotador de Esquema Firebird")
-
+    
     # Garante que metadados e chaves principais estão no estado da sessão
     if 'metadata' not in st.session_state:
         st.session_state.metadata = load_metadata(METADATA_FILE)
@@ -245,275 +539,458 @@ def main():
     st.session_state.metadata.setdefault('VIEWS', {})
     st.session_state.metadata.setdefault('_GLOBAL_CONTEXT', 'Digite aqui informações gerais sobre a empresa, o propósito do banco de dados, etc.')
 
+    # Inicializa o estado do modo de visualização
+    if 'app_mode' not in st.session_state:
+        st.session_state.app_mode = "Explorar Esquema"
+
+    # NOVO: Carrega timestamps e inicializa cache de contagem
+    if 'run_times' not in st.session_state:
+        st.session_state.run_times = load_run_times(RUN_TIMES_FILE)
+    if 'overview_row_counts' not in st.session_state:
+         st.session_state.overview_row_counts = load_overview_counts(OVERVIEW_COUNTS_FILE)
+
+    # Carrega o schema técnico (estrutura real do DB)
     schema_data = load_schema(SCHEMA_FILE)
     if not schema_data:
         st.stop()
 
     # --- Barra Lateral --- 
-    st.sidebar.header("Configurações de Conexão (Amostra)")
-    db_path_input = st.sidebar.text_input("Caminho DB (.fdb)", value=DEFAULT_DB_PATH)
-    db_user_input = st.sidebar.text_input("Usuário DB", value=DEFAULT_DB_USER)
-    # Senha não fica na sidebar, será pedida no expander
-
+    st.sidebar.title("Navegação e Configurações") # Título ajustado
+    
+    # Seletor de Modo
+    st.session_state.app_mode = st.sidebar.radio(
+        "Modo de Visualização",
+        ["Explorar Esquema", "Visão Geral da Documentação"],
+        key='app_mode_selector',
+        index=["Explorar Esquema", "Visão Geral da Documentação"].index(st.session_state.app_mode)
+    )
     st.sidebar.divider()
-    # **NOVO: Campo para Contexto Geral**
+
+    # Configurações de Conexão (Sempre visível nesta versão, pode ser necessário ajustar)
+    st.sidebar.header("Configurações de Conexão")
+    db_path_input = st.sidebar.text_input("Caminho DB (.fdb)", value=DEFAULT_DB_PATH, key="db_path_sb") # Chave diferente para evitar conflito com st.session_state
+    db_user_input = st.sidebar.text_input("Usuário DB", value=DEFAULT_DB_USER, key="db_user_sb")
+    # Senha não fica na sidebar
+    
+    st.sidebar.divider()
+    # Contexto Geral
     st.sidebar.subheader("Contexto Geral")
     context_key = "global_context_input"
-    st.session_state.metadata['_GLOBAL_CONTEXT'] = st.sidebar.text_area(
+    current_global_context = st.session_state.metadata.get('_GLOBAL_CONTEXT', '')
+    new_global_context = st.sidebar.text_area(
         "Descreva o contexto geral da empresa/dados:",
-        value=st.session_state.metadata.get('_GLOBAL_CONTEXT', 'Informações sobre a empresa, propósito do DB...'), # Pega do state ou default
+        value=current_global_context,
         key=context_key,
         height=150
     )
+    if new_global_context != current_global_context:
+        st.session_state.metadata['_GLOBAL_CONTEXT'] = new_global_context
+        st.toast("Contexto global atualizado (não salvo)", icon="✏️")
 
     st.sidebar.divider()
-    # Botão Salvar na Sidebar
+    # Botão Salvar
     if st.sidebar.button("💾 Salvar Metadados e Contexto", use_container_width=True):
         if save_metadata_to_file(st.session_state.metadata, METADATA_FILE):
             st.sidebar.success("Metadados e Contexto salvos!")
+            st.session_state.metadata = load_metadata(METADATA_FILE) # Recarrega
+            st.toast("Metadados salvos!", icon="💾")
         else:
             st.sidebar.error("Falha ao salvar.")
     st.sidebar.caption(f"Salvo em: {METADATA_FILE}")
-    sample_size_input = st.sidebar.number_input("Tamanho da Amostra (Preview/Final)", min_value=1, max_value=100, value=DEFAULT_SAMPLE_SIZE)
 
-    # --- Conteúdo Principal ---
-    st.subheader("Filtro de Objetos")
-    filter_type = st.radio(
-        "Mostrar:",
-        ("Todos", "Tabelas", "Views"),
-        horizontal=True,
-        label_visibility="collapsed"
-    )
+    # --- Conteúdo Principal (Condicional ao Modo) ---
 
-    # Filtrar object_names com base na seleção do rádio
-    all_object_names = sorted(list(schema_data.keys()))
-    if filter_type == "Tabelas":
-        object_names = [name for name in all_object_names if schema_data[name].get("object_type") == "TABLE"]
-    elif filter_type == "Views":
-        object_names = [name for name in all_object_names if schema_data[name].get("object_type") == "VIEW"]
-    else: # "Todos"
-        object_names = all_object_names
-
-    if not object_names:
-        st.warning(f"Nenhum objeto do tipo '{filter_type}' encontrado no arquivo de esquema.")
-        st.stop()
-
-    selected_object = st.selectbox("Selecione uma Tabela ou View para anotar:", object_names)
-
-    # --- Lógica ao Selecionar Objeto --- 
-    if selected_object:
-        object_info = schema_data[selected_object]
-        object_type = object_info.get("object_type", "TABLE")
-        key_type = object_type + "S"
-        st.header(f"Anotando: `{selected_object}` ({object_type})")
-
-        # --- MOVIDO: Buscar e Exibir Amostra de Dados Completa PRIMEIRO --- 
-        sample_data_key = f"sample_data_{selected_object}"
-        if sample_data_key not in st.session_state:
-            logger.info(f"Buscando amostra para {selected_object} pela primeira vez nesta sessão.")
-            password_to_use = "M@nagers2023" # Senha hardcoded
-            with st.spinner(f"Buscando amostra de dados para {selected_object}..."):
-                 st.session_state[sample_data_key] = fetch_sample_data(
-                    db_path=db_path_input,
-                    user=db_user_input,
-                    password=password_to_use,
-                    charset=DEFAULT_DB_CHARSET,
-                    table_name=selected_object,
-                    sample_size=sample_size_input
-                )
-        sample_df = st.session_state.get(sample_data_key, None)
-
-        st.subheader("Amostra de Dados (Preview)")
-        if sample_df is not None:
-            if not sample_df.empty:
-                st.dataframe(sample_df, use_container_width=True)
-            else:
-                st.info(f"Amostra de dados para '{selected_object}' está vazia (0 linhas retornadas).")
-        else:
-             st.warning(f"Não foi possível carregar amostra de dados para '{selected_object}'.")
-        st.divider()
-        # --- Fim da Seção de Amostra --- 
-
-        # --- Anotação da Tabela/View --- 
-        st.subheader("Descrição Geral do Objeto")
+    if st.session_state.app_mode == "Visão Geral da Documentação":
+        st.title("Visão Geral da Documentação e Contagem")
+        st.markdown("Marque os objetos na coluna 'Selecionar' e clique no botão para contar as linhas.")
         
-        # Abordagem mais segura para garantir a estrutura no session_state
-        # 1. Garante que 'TABLES' ou 'VIEWS' existe
-        if key_type not in st.session_state.metadata:
-            st.session_state.metadata[key_type] = {}
-        # 2. Garante que o dicionário para o objeto selecionado existe
-        if selected_object not in st.session_state.metadata[key_type]:
-            st.session_state.metadata[key_type][selected_object] = {}
-        # 3. Garante que a chave 'description' existe dentro do dicionário do objeto
-        if 'description' not in st.session_state.metadata[key_type][selected_object]:
-             st.session_state.metadata[key_type][selected_object]['description'] = ''
-        # 4. Garante que a chave 'COLUMNS' existe dentro do dicionário do objeto
-        if 'COLUMNS' not in st.session_state.metadata[key_type][selected_object]:
-            st.session_state.metadata[key_type][selected_object]['COLUMNS'] = {}
-
-        col1, col2 = st.columns([4, 1]) # Coluna maior para text area, menor para botão
-        with col1:
-            table_desc_key = f"desc_{object_type}_{selected_object}"
-            # Agora podemos acessar diretamente, pois garantimos que existe
-            st.session_state.metadata[key_type][selected_object]['description'] = st.text_area(
-                label="Descreva o propósito desta tabela/view:",
-                value=st.session_state.metadata[key_type][selected_object]['description'],
-                key=table_desc_key,
-                height=100
-            )
-        with col2:
-             # Botão para sugerir descrição da tabela/view
-             if st.button("Sugerir (IA)", key=f"btn_ai_desc_{selected_object}", use_container_width=True):
-                st.write("Gerando...") # Feedback visual temporário
-                col_names_list = [col.get('name', '') for col in object_info.get('columns', [])]
-                prompt_object = (
-                    f"Sugira uma descrição concisa em português brasileiro para um(a) {object_type} de banco de dados "
-                    f"chamado(a) '{selected_object}'. "
-                    f"As colunas são: {', '.join(col_names_list[:10])}... "
-                    f"Foque no propósito provável do negócio. Responda apenas com a descrição sugerida."
-                )
-                suggestion = generate_ai_description(prompt_object)
-                if suggestion:
-                    st.session_state.metadata[key_type][selected_object]['description'] = suggestion
-                    st.rerun() # Força rerodar para atualizar o text_area com a sugestão
-
-        # **NOVO: Botão para sugerir todas as colunas**
-        st.markdown("--- Sugestão para Todas as Colunas ---")
-        if st.button("Sugerir Todas as Colunas (IA)", key=f"btn_ai_all_cols_{selected_object}", help="Pede sugestões de descrição para todas as colunas listadas abaixo."):
-            columns_to_process = object_info.get('columns', [])
-            if not columns_to_process:
-                st.toast("Nenhuma coluna encontrada para gerar sugestões.")
-            else:
-                progress_bar = st.progress(0, text="Gerando sugestões para colunas...")
-                total_cols = len(columns_to_process)
-                for i, col in enumerate(columns_to_process):
-                    col_name = col.get('name')
-                    col_type = col.get('type')
-                    if not col_name or not col_type:
-                        continue
-
-                    # Atualiza texto da barra de progresso
-                    progress_text = f"Gerando sugestões para colunas... ({i+1}/{total_cols}: {col_name})"
-                    progress_bar.progress((i + 1) / total_cols, text=progress_text)
-
-                    # Gera o prompt específico para a coluna
-                    prompt_column = (
-                        f"Sugira uma descrição concisa em português brasileiro para a coluna de banco de dados chamada '{col_name}' "
-                        f"do tipo '{col_type}' que pertence ao objeto '{selected_object}' ({object_type}). "
-                        f"Foque no significado provável do dado armazenado. Responda apenas com a descrição sugerida."
-                    )
-                    # Chama a IA (sem spinner individual, pois temos a barra de progresso)
-                    # Modificar generate_ai_description para não usar spinner interno ou criar uma versão sem spinner?
-                    # Por enquanto, manteremos o spinner interno, pode ficar um pouco repetitivo visualmente.
-                    suggestion = generate_ai_description(prompt_column)
-
-                    # Atualiza o estado da sessão com a sugestão (mesmo se for None ou erro, para registrar)
-                    if suggestion:
-                         st.session_state.metadata.setdefault(key_type, {}).setdefault(selected_object, {}).setdefault('COLUMNS', {}).setdefault(col_name, {})['description'] = suggestion
-                    else: # Se falhar, não sobrescreve descrição existente
-                         logger.warning(f"Não foi possível gerar sugestão para a coluna {col_name}")
-
-                progress_bar.progress(1.0, text="Sugestões de colunas concluídas!")
-                st.toast("Sugestões para todas as colunas foram geradas!")
-                # Pequena pausa para o usuário ver a mensagem final da barra
-                import time
-                time.sleep(1)
-                st.rerun() # Reroda para exibir todas as sugestões nos campos
-
-        # --- Anotação das Colunas ---
-        st.subheader("Colunas, Exemplos e Descrições")
-        if object_info.get('columns'):
-            object_columns_metadata = st.session_state.metadata[key_type][selected_object]['COLUMNS']
-            for col in object_info['columns']:
-                col_name = col['name']
-                col_type = col['type']
-                col_nullable = col['nullable']
-                
-                # Garante a estrutura para esta coluna específica
-                if col_name not in object_columns_metadata:
-                    object_columns_metadata[col_name] = {}
-                current_col_metadata = object_columns_metadata[col_name]
-                if 'description' not in current_col_metadata:
-                     current_col_metadata['description'] = ''
-                if 'value_mapping_notes' not in current_col_metadata:
-                    current_col_metadata['value_mapping_notes'] = ''
-                
-                # Exibe nome, tipo, explicação e exemplos
-                type_explanation = get_type_explanation(col_type)
-                markdown_string = f"**`{col_name}`** (`{col_type}`){' - *NOT NULL*' if not col_nullable else ''}"
-                if type_explanation:
-                    markdown_string += f" - {type_explanation}"
-                st.markdown(markdown_string)
-                
-                # **NOVO: Mostrar exemplos de dados da coluna (se disponíveis)**
-                if sample_df is not None and not sample_df.empty and col_name in sample_df.columns:
-                    try:
-                        # Pega até 3 valores únicos não nulos
-                        unique_values = sample_df[col_name].dropna().unique()
-                        examples = [str(v) for v in unique_values[:3]] # Converte para string
-                        if examples:
-                            st.caption(f"Exemplos: `{'`, `'.join(examples)}`")
-                        else:
-                            st.caption("Exemplos: (Amostra sem valores não nulos para esta coluna)")
-                    except Exception as e:
-                        logger.warning(f"Erro ao processar exemplos para coluna {col_name}: {e}")
-                        st.caption("Exemplos: (Erro ao buscar)")
-                # Fim do bloco de exemplos
-                
-                # **NOVO: Lógica de Preenchimento Automático Heurístico**
-                description_value = current_col_metadata['description']
-                if not description_value: # Só tenta preencher se estiver vazio
-                    existing_desc = find_existing_description(st.session_state.metadata, col_name)
-                    if existing_desc:
-                        logger.info(f"Preenchendo descrição vazia de '{selected_object}.{col_name}' com descrição encontrada em outro lugar.")
-                        description_value = existing_desc # Usa a descrição encontrada
-                        # Não salva no state ainda, apenas usa como valor inicial do text_area
-
-                # Layout para descrição da coluna e botão IA
-                col_desc_area, col_btn_area = st.columns([4,1])
-                with col_desc_area:
-                    col_key = f"desc_col_{selected_object}_{col_name}"
-                    # Usa 'description_value' que pode ter sido preenchido acima
-                    current_col_metadata['description'] = st.text_area(
-                        label=f"Descrição para `{col_name}`:",
-                        value=description_value, # Valor inicial pode ser o existente ou preenchido
-                        key=col_key,
-                        label_visibility="collapsed",
-                        height=75
-                    )
-                with col_btn_area:
-                    # Botão para sugerir descrição da coluna
-                    if st.button("Sugerir (IA)", key=f"btn_ai_col_{selected_object}_{col_name}", use_container_width=True):
-                        st.write("Gerando...") # Feedback temporário
-                        prompt_column = (
-                            f"Sugira uma descrição concisa em português brasileiro para a coluna de banco de dados chamada '{col_name}' "
-                            f"do tipo '{col_type}' que pertence ao objeto '{selected_object}' ({object_type}). "
-                            f"Foque no significado provável do dado armazenado. Responda apenas com a descrição sugerida."
-                        )
-                        suggestion = generate_ai_description(prompt_column)
-                        if suggestion:
-                            # Salva a sugestão da IA no estado
-                            current_col_metadata['description'] = suggestion
-                            st.rerun()
-
-                st.caption("Acima: Descrição geral. Abaixo: Mapeamento de valores.") # Legenda ajustada
-                st.markdown("--- Optional: Value Mappings ---")
-                map_key = f"map_notes_{selected_object}_{col_name}"
-                current_col_metadata['value_mapping_notes'] = st.text_area(
-                     label=f"Notas sobre mapeamento de valores para `{col_name}` (Ex: 1: Ativo, 2: Inativo):",
-                     value=current_col_metadata['value_mapping_notes'],
-                     key=map_key,
-                     label_visibility="collapsed",
-                     height=75
+        if schema_data:
+             try:
+                 df_initial_overview = generate_documentation_overview(schema_data)
+                 
+                 # Usar st.data_editor em vez de st.dataframe
+                 edited_df = st.data_editor(
+                     df_initial_overview, 
+                     key="overview_editor",
+                     use_container_width=True,
+                     # Desabilitar edição para outras colunas (opcional, mas recomendado)
+                     disabled=['Objeto', 'Tipo', 'Total Colunas', 'Total Linhas', 'Última Contagem',
+                               'Colunas Descritas', '% Descritas', 'Colunas com Notas', '% Com Notas']
                  )
-                st.divider()
-        else:
-            st.write("Nenhuma coluna definida para este objeto.")
+                 
+                 st.divider()
+                 
+                 # --- Ações de Contagem (MODIFICADO) --- 
+                 col_act_all, col_act_selected = st.columns([1, 2])
+                 
+                 with col_act_all:
+                    # --- Botão Contar Todos --- 
+                    if st.button("Calcular Contagem (Todos)", key="btn_count_all", use_container_width=True):
+                        password_to_use = "M@nagers2023" # Senha hardcoded ainda
+                        objects_to_count = df_initial_overview['Objeto'].tolist()
+                        total_obj = len(objects_to_count)
+                        progress_bar = st.progress(0, text="Iniciando contagem...")
+                        local_counts = {} # NOVO: Dicionário local para acumular
+                        error_occurred = False
 
-        # --- Exibição de Constraints --- 
-        if object_info.get('constraints') or object_type == "TABLE":
-            st.subheader("Constraints" + (" (Info)" if object_type == "VIEW" else ""))
-            display_constraints(object_info.get('constraints'))
+                        with st.spinner(f"Calculando contagem para {total_obj} objetos..."):
+                            for i, obj_name in enumerate(objects_to_count):
+                                progress_text = f"Contando {obj_name}... ({i+1}/{total_obj})"
+                                progress_bar.progress((i + 1) / total_obj, text=progress_text)
+                                logger.info(f"Executando fetch_row_count para: {obj_name}")
+                                count_result = fetch_row_count(
+                                    db_path=db_path_input, user=db_user_input, 
+                                    password=password_to_use, charset=DEFAULT_DB_CHARSET, 
+                                    table_name=obj_name
+                                )
+                                now_iso_obj = datetime.datetime.now().isoformat()
+                                # Atualiza dicionário LOCAL
+                                local_counts[obj_name] = {
+                                     "count": count_result,
+                                     "timestamp": now_iso_obj
+                                }
+                                if isinstance(count_result, str) and count_result.startswith("Erro"):
+                                     error_occurred = True
+                                     logger.warning(f"Erro ao contar {obj_name}: {count_result}")
+                        
+                        # Atualiza ESTADO DA SESSÃO com todos os resultados APÓS o loop
+                        st.session_state.overview_row_counts = local_counts
+                        # Salva as contagens do estado da sessão
+                        save_overview_counts(st.session_state.overview_row_counts, OVERVIEW_COUNTS_FILE)
+                        
+                        # Atualiza timestamp geral apenas se não houve erro
+                        if not error_occurred:
+                             now_iso_all = datetime.datetime.now().isoformat()
+                             st.session_state.run_times['last_row_count_all'] = now_iso_all
+                             save_run_times(st.session_state.run_times, RUN_TIMES_FILE)
+                             progress_bar.progress(1.0, text="Contagem concluída!")
+                             st.toast("Contagem de linhas concluída e salva!", icon="✅")
+                        else:
+                             progress_bar.progress(1.0, text="Contagem concluída (com erros).")
+                             st.warning("Contagem concluída, mas ocorreram erros (ver logs ou tabela). Timestamp geral não atualizado.")
+                        
+                        time.sleep(0.1)
+                        st.rerun() 
+                    
+                    # Exibe Última Execução Completa Bem Sucedida
+                    last_run_all = st.session_state.run_times.get('last_row_count_all')
+                    if last_run_all:
+                        try:
+                            dt_obj_all = datetime.datetime.fromisoformat(last_run_all)
+                            last_run_display_all = dt_obj_all.strftime("%d/%m/%Y %H:%M:%S")
+                        except ValueError:
+                            last_run_display_all = last_run_all
+                        st.caption(f"Última contagem completa OK: {last_run_display_all}")
+                    else:
+                        st.caption("Contagem completa ainda não foi realizada com sucesso.")
+
+                 with col_act_selected: 
+                     # --- Botão Contar SELECIONADOS --- 
+                     objects_selected = edited_df[edited_df["Selecionar"] == True]['Objeto'].tolist()
+                     
+                     if st.button(f"Contar Linhas de {len(objects_selected)} Objeto(s) Selecionado(s)", key="btn_count_selected", disabled=not objects_selected, use_container_width=True):
+                          password_to_use_sel = "M@nagers2023"
+                          total_sel = len(objects_selected)
+                          progress_bar_sel = st.progress(0, text="Iniciando contagem dos selecionados...")
+                          error_occurred_sel = False
+                          
+                          with st.spinner(f"Calculando contagem para {total_sel} objetos selecionados..."):
+                              for i, obj_name_sel in enumerate(objects_selected):
+                                  progress_text_sel = f"Contando {obj_name_sel}... ({i+1}/{total_sel})"
+                                  progress_bar_sel.progress((i + 1) / total_sel, text=progress_text_sel)
+                                  logger.info(f"[Contagem Selecionados] Chamando fetch_row_count para: {obj_name_sel}")
+                                  count_result_sel = fetch_row_count(
+                                      db_path=db_path_input, user=db_user_input, 
+                                      password=password_to_use_sel, charset=DEFAULT_DB_CHARSET, 
+                                      table_name=obj_name_sel
+                                  )
+                                  now_iso_sel = datetime.datetime.now().isoformat()
+                                  st.session_state.overview_row_counts[obj_name_sel] = {
+                                        "count": count_result_sel,
+                                        "timestamp": now_iso_sel
+                                  }
+                                  if isinstance(count_result_sel, str) and count_result_sel.startswith("Erro"):
+                                       error_occurred_sel = True
+                                       logger.warning(f"[Contagem Selecionados] Erro ao contar {obj_name_sel}: {count_result_sel}")
+                           
+                          save_overview_counts(st.session_state.overview_row_counts, OVERVIEW_COUNTS_FILE)
+                          progress_bar_sel.progress(1.0, text="Contagem dos selecionados concluída!")
+                          if not error_occurred_sel:
+                               st.toast(f"Contagem para {total_sel} objeto(s) selecionado(s) atualizada!", icon="✅")
+                          else:
+                               st.warning(f"Contagem concluída para selecionados, mas ocorreram erros.")
+                          
+                          time.sleep(0.1)
+                          st.rerun()
+                          
+                     st.caption("Marque os objetos na tabela acima para habilitar este botão.")
+                 
+                 # Adiciona legenda
+                 st.subheader("Legenda:")
+                 st.markdown("""
+                 *   **Objeto:** Nome da Tabela ou View.
+                 *   **Tipo:** Indica se é TABLE ou VIEW.
+                 *   **Total Colunas:** Número total de colunas no objeto (do schema técnico).
+                 *   **Total Linhas:** Contagem real não implementada (N/A).
+                 *   **Última Contagem:** Última vez que a contagem foi realizada.
+                 *   **Colunas Descritas:** Número de colunas com `description` preenchido nos metadados.
+                 *   **Colunas com Notas:** Número de colunas com `value_mapping_notes` preenchido nos metadados.
+                 *   **% Descritas / % Com Notas:** Percentuais correspondentes.
+                 """)
+
+                 # --- NOVA SEÇÃO: Ranking de Colunas Mais Referenciadas ---
+                 st.divider()
+                 st.subheader("Colunas Mais Referenciadas (via Chaves Estrangeiras)")
+                 st.caption("Ajuda a priorizar a documentação das colunas mais centrais do sistema.")
+                 
+                 try:
+                     # LOG DE DIAGNÓSTICO ADICIONAL:
+                     # Substitua 'SUA_TABELA_COM_FK' pelo nome de uma tabela que DEVE ter FKs no JSON
+                     tabela_teste = 'TABELA_LOCAL_COBRANCA' # <-- COLOQUE O NOME DA SUA TABELA AQUI
+                     if schema_data and tabela_teste in schema_data:
+                         fks_teste = schema_data.get(tabela_teste, {}).get('constraints', {}).get('foreign_keys', 'CHAVE_NAO_ENCONTRADA')
+                         logger.debug(f"[DIAGNÓSTICO main] Acesso direto a FKs para '{tabela_teste}': {fks_teste}")
+                     else:
+                         logger.debug(f"[DIAGNÓSTICO main] Tabela de teste '{tabela_teste}' não encontrada no schema_data.")
+                     
+                     # Chamada original da função
+                     fk_counts = calculate_fk_reference_counts(schema_data)
+                     if fk_counts:
+                         df_fk_counts = pd.DataFrame(fk_counts, columns=['Tabela Referenciada', 'Coluna Referenciada', 'Nº de Referências'])
+                         st.dataframe(df_fk_counts, use_container_width=True)
+                     else:
+                         st.info("Nenhuma referência de chave estrangeira encontrada no esquema técnico para análise.")
+                 except Exception as e:
+                     logger.error(f"Erro ao calcular ou exibir contagem de referências FK: {e}", exc_info=True)
+                     st.error("Ocorreu um erro ao analisar as referências de chaves estrangeiras.")
+             except Exception as e:
+                 st.error(f"Erro ao gerar a visão geral da documentação: {e}")
+                 logger.exception("Erro na seção Visão Geral:")
+        else:
+             st.warning("Esquema técnico não carregado.")
+
+    elif st.session_state.app_mode == "Explorar Esquema":
+        st.title("📝 Anotador de Esquema Firebird") # Título do modo original
+        
+        # --- Filtro e Seletor de Objetos (Lógica existente) ---
+        st.subheader("Filtro de Objetos")
+        filter_type = st.radio(
+            "Mostrar:",
+            ("Todos", "Tabelas", "Views"),
+            horizontal=True,
+            label_visibility="collapsed"
+        )
+        # Filtrar object_names com base na seleção do rádio (usando schema_data técnico)
+        all_object_names = sorted(list(schema_data.keys()))
+        object_names = []
+        if filter_type == "Tabelas":
+            object_names = [name for name in all_object_names if schema_data[name].get("object_type") == "TABLE"]
+        elif filter_type == "Views":
+            object_names = [name for name in all_object_names if schema_data[name].get("object_type") == "VIEW"]
+        else: # "Todos"
+            # Inclui apenas TABLE e VIEW (ignora outros tipos que possam existir no schema_data)
+            object_names = [name for name in all_object_names if schema_data[name].get("object_type") in ["TABLE", "VIEW"]]
+
+        if not object_names:
+            st.warning(f"Nenhum objeto do tipo '{filter_type}' encontrado no arquivo de esquema.")
+            st.stop()
+        
+        selected_object = st.selectbox("Selecione uma Tabela ou View para anotar:", object_names)
+        
+        # --- Lógica ao Selecionar Objeto (Lógica existente adaptada) ---
+        if selected_object:
+            if st.session_state.get('last_displayed_sample_object') != selected_object:
+                st.session_state.sample_display_df = None
+                st.session_state.last_displayed_sample_object = selected_object
+
+            object_info = schema_data[selected_object] # Info técnica
+            object_type = object_info.get("object_type", "TABLE")
+            key_type = object_type + "S" # Para acessar metadados
+            
+            st.header(f"Anotando: `{selected_object}` ({object_type})")
+            st.divider()
+            
+            # --- Seção de Amostra de Dados (com botões) ---
+            with st.expander(f"Visualizar Amostra de Dados de '{selected_object}'", expanded=False):
+                st.write("**Buscar Amostra:**")
+                sample_sizes = [10, 50, 100, 500, 1000, 5000]
+                cols_buttons = st.columns(len(sample_sizes))
+                password_to_use = "M@nagers2023"
+                for i, size in enumerate(sample_sizes):
+                    with cols_buttons[i]:
+                        if st.button(f"{size} linhas", key=f"btn_fetch_display_sample_{size}_{selected_object}", use_container_width=True):
+                            with st.spinner(f"Buscando {size} linhas para visualização..."):
+                                st.session_state.sample_display_df = fetch_sample_data(
+                                    db_path=db_path_input, user=db_user_input, password=password_to_use,
+                                    charset=DEFAULT_DB_CHARSET, table_name=selected_object,
+                                    sample_size=size
+                                )
+                                st.rerun()
+                st.divider()
+                if isinstance(st.session_state.get('sample_display_df'), pd.DataFrame):
+                    df_to_show = st.session_state.sample_display_df
+                    st.info(f"Exibindo {len(df_to_show)} linhas.")
+                    if not df_to_show.empty:
+                        st.dataframe(df_to_show, use_container_width=True)
+                    else:
+                        st.info("A consulta da amostra não retornou linhas.")
+                elif isinstance(st.session_state.get('sample_display_df'), str):
+                    st.error(f"Erro ao buscar amostra: {st.session_state.sample_display_df}")
+                else:
+                    st.caption("Clique em um dos botões acima para buscar e exibir uma amostra dos dados.")
+            st.divider()
+
+            # --- Busca de Amostra para Exemplos (Lógica existente) ---
+            sample_data_key = f"sample_data_{selected_object}"
+            if sample_data_key not in st.session_state:
+                 logger.info(f"Buscando amostra para {selected_object} pela primeira vez nesta sessão.")
+                 password_to_use_ex = "M@nagers2023"
+                 with st.spinner(f"Buscando amostra de dados para {selected_object}..."):
+                     st.session_state[sample_data_key] = fetch_sample_data(
+                        db_path=db_path_input, user=db_user_input, password=password_to_use_ex,
+                        charset=DEFAULT_DB_CHARSET, table_name=selected_object, sample_size=DEFAULT_SAMPLE_SIZE
+                     )
+            sample_df = st.session_state.get(sample_data_key, None)
+            # Removida exibição duplicada da amostra preview aqui
+
+            # --- Anotação da Tabela/View (Lógica existente) ---
+            st.subheader("Descrição Geral do Objeto")
+            if key_type not in st.session_state.metadata: st.session_state.metadata[key_type] = {}
+            if selected_object not in st.session_state.metadata[key_type]: st.session_state.metadata[key_type][selected_object] = {}
+            if 'description' not in st.session_state.metadata[key_type][selected_object]: st.session_state.metadata[key_type][selected_object]['description'] = ''
+            if 'COLUMNS' not in st.session_state.metadata[key_type][selected_object]: st.session_state.metadata[key_type][selected_object]['COLUMNS'] = {}
+            col1, col2 = st.columns([4, 1])
+            with col1:
+                table_desc_key = f"desc_{object_type}_{selected_object}"
+                st.session_state.metadata[key_type][selected_object]['description'] = st.text_area(
+                    label="Descreva o propósito desta tabela/view:",
+                    value=st.session_state.metadata[key_type][selected_object]['description'],
+                    key=table_desc_key, height=100)
+            with col2:
+                 if st.button("Sugerir (IA)", key=f"btn_ai_desc_{selected_object}", use_container_width=True):
+                    col_names_list = [col.get('name', '') for col in object_info.get('columns', [])]
+                    prompt_object = (
+                        f"Sugira uma descrição concisa em português brasileiro para um(a) {object_type} de banco de dados "
+                        f"chamado(a) '{selected_object}'. As colunas são: {', '.join(col_names_list[:10])}... "
+                        f"Foque no propósito provável do negócio. Responda apenas com a descrição sugerida.")
+                    suggestion = generate_ai_description(prompt_object)
+                    if suggestion:
+                        st.session_state.metadata[key_type][selected_object]['description'] = suggestion
+                        st.rerun()
+
+            # --- Botão Sugerir Todas as Colunas (Lógica existente) ---
+            st.markdown("--- Sugestão para Todas as Colunas ---")
+            if st.button("Sugerir Todas as Colunas (IA)", key=f"btn_ai_all_cols_{selected_object}", help="Pede sugestões de descrição para todas as colunas listadas abaixo."):
+                 columns_to_process = object_info.get('columns', [])
+                 if not columns_to_process: st.toast("Nenhuma coluna encontrada para gerar sugestões.")
+                 else:
+                     progress_bar = st.progress(0, text="Gerando sugestões para colunas...")
+                     total_cols = len(columns_to_process)
+                     for i, col in enumerate(columns_to_process):
+                         col_name = col.get('name'); col_type = col.get('type')
+                         if not col_name or not col_type: continue
+                         progress_text = f"Gerando sugestões para colunas... ({i+1}/{total_cols}: {col_name})"
+                         progress_bar.progress((i + 1) / total_cols, text=progress_text)
+                         prompt_column = (f"Sugira uma descrição concisa em português brasileiro para a coluna '{col_name}' ({col_type}) do objeto '{selected_object}' ({object_type}). Foque no significado. Responda só a descrição.")
+                         suggestion = generate_ai_description(prompt_column)
+                         if suggestion: st.session_state.metadata.setdefault(key_type, {}).setdefault(selected_object, {}).setdefault('COLUMNS', {}).setdefault(col_name, {})['description'] = suggestion
+                         else: logger.warning(f"Não foi possível gerar sugestão para a coluna {col_name}")
+                     progress_bar.progress(1.0, text="Sugestões concluídas!"); st.toast("Sugestões geradas!"); time.sleep(1); st.rerun()
+
+
+            # --- Anotação das Colunas (Lógica existente) ---
+            st.subheader("Colunas, Exemplos e Descrições")
+            if object_info.get('columns'):
+                object_columns_metadata = st.session_state.metadata[key_type][selected_object]['COLUMNS']
+                for col in object_info['columns']:
+                    col_name = col['name']; col_type = col['type']; col_nullable = col['nullable']
+                    if col_name not in object_columns_metadata: object_columns_metadata[col_name] = {}
+                    current_col_metadata = object_columns_metadata[col_name]
+                    if 'description' not in current_col_metadata: current_col_metadata['description'] = ''
+                    if 'value_mapping_notes' not in current_col_metadata: current_col_metadata['value_mapping_notes'] = ''
+                    type_explanation = get_type_explanation(col_type)
+                    markdown_string = f"**`{col_name}`** (`{col_type}`){' - *NOT NULL*' if not col_nullable else ''}"
+                    if type_explanation: markdown_string += f" - {type_explanation}"
+                    st.markdown(markdown_string)
+                    if sample_df is not None and not sample_df.empty and col_name in sample_df.columns:
+                        try:
+                            unique_values = sample_df[col_name].dropna().unique()
+                            examples = [str(v) for v in unique_values[:3]]
+                            if examples: st.caption(f"Exemplos: `{'`, `'.join(examples)}`")
+                            else: st.caption("Exemplos: (Amostra sem valores não nulos)")
+                        except Exception as e: logger.warning(f"Erro ao processar exemplos: {e}"); st.caption("Exemplos: (Erro)")
+                    description_value = current_col_metadata['description']
+                    if not description_value:
+                        # ATUALIZADO: Passa mais argumentos para a função
+                        existing_desc, source = find_existing_description(
+                            st.session_state.metadata, 
+                            schema_data,             # Passa o schema técnico
+                            selected_object,         # Passa o nome do objeto atual
+                            col_name
+                        )
+                        if existing_desc:
+                            description_value = existing_desc
+                            logger.info(f"Preenchendo '{selected_object}.{col_name}' com sugestão via {source}")
+                    col_desc_area, col_btn_area = st.columns([4,1])
+                    with col_desc_area:
+                        col_key = f"desc_col_{selected_object}_{col_name}"
+                        current_col_metadata['description'] = st.text_area(label=f"Descrição para `{col_name}`:", value=description_value, key=col_key, label_visibility="collapsed", height=75)
+                    with col_btn_area:
+                        if st.button("Sugerir (IA)", key=f"btn_ai_col_{selected_object}_{col_name}", use_container_width=True):
+                            prompt_column = (f"Sugira descrição concisa pt-br para coluna '{col_name}' ({col_type}) do objeto '{selected_object}' ({object_type}). Significado? Responda só descrição.")
+                            suggestion = generate_ai_description(prompt_column)
+                            if suggestion: current_col_metadata['description'] = suggestion; st.rerun()
+                    st.caption("Acima: Descrição. Abaixo: Mapeamento."); st.markdown("--- Mapeamento ---")
+                    map_key = f"map_notes_{selected_object}_{col_name}"
+                    current_col_metadata['value_mapping_notes'] = st.text_area(label=f"Notas mapeamento `{col_name}`:", value=current_col_metadata['value_mapping_notes'], key=map_key, label_visibility="collapsed", height=75)
+                    st.divider()
+
+                    # Descrição da Coluna (com busca heurística APRIMORADA)
+                    col_desc_key = f"{col_key}_desc"
+                    current_col_desc = current_col_metadata.get('description', '')
+                    description_value_to_display = current_col_desc
+                    heuristic_source = None # Fonte da heurística
+                    
+                    if not current_col_desc:
+                        # ATUALIZADO: Passa mais argumentos para a função
+                        existing_desc, source = find_existing_description(
+                            st.session_state.metadata, 
+                            schema_data,             # Passa o schema técnico
+                            selected_object,         # Passa o nome do objeto atual
+                            col_name
+                        )
+                        if existing_desc:
+                            description_value_to_display = existing_desc
+                            heuristic_source = source # Armazena a fonte
+                            logger.info(f"Preenchendo '{selected_object}.{col_name}' com sugestão via {source}")
+                        
+                        # Exibe a legenda SE a heurística foi aplicada
+                        if heuristic_source:
+                            # ATUALIZADO: Mostra a fonte da sugestão
+                            st.caption(f"ℹ️ Sugestão preenchida ({heuristic_source}).")
+
+                        # Layout para descrição e botão IA 
+                        col_desc_area, col_btn_area = st.columns([4,1])
+                        with col_desc_area:
+                             new_col_desc_input = st.text_area(
+                                 label=f"Descrição para `{col_name}`:",
+                                 value=description_value_to_display, 
+                                 key=col_desc_key,
+                                 label_visibility="collapsed",
+                                 height=75
+                             )
+                             if new_col_desc_input != current_col_metadata.get('description', ''):
+                                  current_col_metadata['description'] = new_col_desc_input
+                                  st.toast(f"Descrição '{col_name}' atualizada (não salva)", icon="✏️")
+                        # ... (botão IA)
+                        # ... (notas de mapeamento)
+            else: st.write("Nenhuma coluna definida.")
+
+            # --- Exibição de Constraints (Lógica existente) ---
+            if object_info.get('constraints') or object_type == "TABLE":
+                 st.subheader("Constraints" + (" (Info)" if object_type == "VIEW" else ""))
+                 display_constraints(object_info.get('constraints'))
+
 
 if __name__ == "__main__":
     main() 

@@ -20,12 +20,31 @@ O processo está dividido em duas etapas principais:
 
 2.  **Anotação Interativa de Metadados:**
     *   **Ferramenta:** Aplicação web Streamlit `view_schema_app.py`.
+    *   **Funcionalidades Atuais:**
+        *   **Dois Modos de Visualização:** Alternância via barra lateral entre:
+            *   **Explorar Esquema:** Permite navegar por tabelas e views individualmente, visualizar estrutura (baseado em `firebird_schema.json`), exemplos de dados, e editar descrições/notas de mapeamento no `schema_metadata.json`.
+            *   **Visão Geral da Documentação:** Exibe uma tabela sumarizada com o status da documentação (contagem de colunas, colunas descritas, colunas com notas, percentuais) para todas as tabelas e views presentes no `schema_metadata.json`. Inclui também a contagem de linhas e a data da última contagem.
+        *   **Carregamento de Esquema e Metadados:** Carrega a estrutura de `firebird_schema.json` e as anotações de `schema_metadata.json`.
+        *   **Contexto Global:** Permite editar e salvar uma descrição geral do banco de dados ou empresa.
+        *   **Anotação de Objetos:** Campo para descrever o propósito de cada tabela/view.
+        *   **Anotação de Colunas:** Campos para descrever cada coluna e adicionar notas sobre mapeamento de valores.
+        *   **Preenchimento Heurístico:** Tenta preencher automaticamente a descrição de colunas vazias com base em descrições existentes para colunas de mesmo nome em outras tabelas/views (com indicação visual ℹ️).
+        *   **Sugestões via IA (Ollama):** Botões para solicitar sugestões de descrição para objetos (tabelas/views) e colunas individuais, ou para todas as colunas de um objeto.
+        *   **Visualização de Amostra:** Botões para buscar e exibir amostras de dados de tamanhos pré-definidos (10 a 5000 linhas) para o objeto selecionado.
+        *   **Contagem de Linhas (Visão Geral):**
+            *   Exibe a última contagem de linhas conhecida para cada objeto e a data/hora dessa contagem.
+            *   Botão para recalcular a contagem de linhas para *todos* os objetos, com persistência granular e timestamp da última execução bem-sucedida.
+            *   Botão para recalcular a contagem de linhas para *objetos selecionados* na tabela.
+        *   **Persistência:** Salva todas as anotações, contexto global, contagens e timestamps nos arquivos `schema_metadata.json`, `overview_counts.json` e `run_times.json`.
+        *   **Classificação de Objetos:** Permite mover objetos inicialmente classificados como "DESCONHECIDOS" para as categorias "TABLES" ou "VIEWS".
     *   **Entrada:**
         *   `firebird_schema.json` (para exibir a estrutura).
-        *   Interação do usuário (você!) para adicionar/editar descrições e mapeamentos de valores.
-        *   (Opcional) Sugestões de descrição geradas pela IA (Ollama) através dos botões "Sugerir (IA)".
-    *   **Saída:** Arquivo `schema_metadata.json`, contendo as descrições de tabelas/views, descrições de colunas e notas sobre mapeamentos de valores inseridos pelo usuário.
-    *   **Status Atual:** Estamos nesta fase, usando a aplicação Streamlit para criar/refinar o `schema_metadata.json`.
+        *   `schema_metadata.json` (para carregar/salvar anotações).
+        *   `overview_counts.json` (para carregar/salvar contagens).
+        *   `run_times.json` (para carregar/salvar timestamps de execução).
+        *   Interação do usuário para anotações, contagens e uso da IA.
+    *   **Saída Principal:** Arquivo `schema_metadata.json` enriquecido.
+    *   **Status Atual:** Aplicação funcional com as características acima, permitindo a criação/refinamento do `schema_metadata.json`.
 
 ## Próxima Etapa: Geração dos Dados de Treinamento
 
